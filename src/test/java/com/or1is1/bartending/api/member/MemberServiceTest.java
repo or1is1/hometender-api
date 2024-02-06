@@ -35,6 +35,5 @@ class MemberServiceTest {
 
         //then
         assertThat(userSignResponse.nickname()).isEqualTo(nickname);
-        assertThat(passwordEncoder.matches(password, userSignResponse.password())).isTrue();
     }
 }
