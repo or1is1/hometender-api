@@ -24,11 +24,11 @@ class MemberServiceTest {
     @Transactional
     void join() {
         // given
-        String email = "gildong@gmail.com";
-        String password = "hong1443";
+        String loginId = "hong1443";
+        String password = "hong1443@";
         String nickname = "홍길동";
 
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 
         // when
         MemberJoinResponse userSignResponse = memberService.join(memberJoinRequest);

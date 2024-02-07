@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = {MemberController.class}, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 class MemberControllerTest {
     private final ObjectMapper objectMapper;
-    private final String email;
+    private final String loginId;
     private final String password;
     private final String nickname;
     private final String url;
@@ -40,8 +40,8 @@ class MemberControllerTest {
     // 공통 사용 요소 초기화
     public MemberControllerTest() {
         objectMapper = new ObjectMapper();
-        email = "gildong@gmail.com";
-        password = "hong1443";
+        loginId = "hong1443";
+        password = "hong1443!";
         nickname = "홍길동";
         url = "/api/members";
     }
@@ -50,7 +50,7 @@ class MemberControllerTest {
     @DisplayName("정상적인 회원가입 처리")
     void join() throws Exception {
         // given
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = objectMapper.writeValueAsString(memberJoinRequest);
 
         // when
@@ -67,11 +67,11 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("올바른 형식의 이메일로 회원가입을 해야 한다.")
-    void joinWithWrongEmail() throws Exception {
+    @DisplayName("로그인 아이디는 비어있으면 안된다.")
+    void joinWithBlankLoginId() throws Exception {
         // given
-        String email = "gildong#gmail.com";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        String loginId = "        ";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = objectMapper.writeValueAsString(memberJoinRequest);
 
         // when
@@ -90,16 +90,72 @@ class MemberControllerTest {
         assertThat(bindingResult.getErrorCount()).isEqualTo(1);
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
-        assertThat(objectError.getCode()).isEqualTo("Email");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("잘못된 이메일 형식입니다.");
+        assertThat(objectError.getCode()).isEqualTo("NotBlank");
+        assertThat(objectError.getDefaultMessage()).isEqualTo("공백은 허용되지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("로그인 아이디는 5글자 이상이어야 한다.")
+    void joinWithTooShortLoginId() throws Exception {
+        // given
+        String loginId = "gild";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
+        String content = objectMapper.writeValueAsString(memberJoinRequest);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(url)
+                .contentType(APPLICATION_JSON)
+                .content(content));
+
+        //then
+        MvcResult mvcResult = resultActions.andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolvedException = mvcResult.getResolvedException();
+        assertThat(resolvedException).isExactlyInstanceOf(MethodArgumentNotValidException.class);
+
+        BindingResult bindingResult = ((MethodArgumentNotValidException) resolvedException).getBindingResult();
+        assertThat(bindingResult.getErrorCount()).isEqualTo(1);
+
+        ObjectError objectError = bindingResult.getAllErrors().get(0);
+        assertThat(objectError.getCode()).isEqualTo("Size");
+        assertThat(objectError.getDefaultMessage()).isEqualTo("아이디는 5자 이상, 20자 미만이여야 합니다.");
+    }
+
+    @Test
+    @DisplayName("로그인 아이디는 20글자 미만이어야 한다.")
+    void joinWithTooLongLoginId() throws Exception {
+        // given
+        String loginId = "hong1443hong1443hong1";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
+        String content = objectMapper.writeValueAsString(memberJoinRequest);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post(url)
+                .contentType(APPLICATION_JSON)
+                .content(content));
+
+        //then
+        MvcResult mvcResult = resultActions.andExpect(status().isBadRequest())
+                .andReturn();
+
+        Exception resolvedException = mvcResult.getResolvedException();
+        assertThat(resolvedException).isExactlyInstanceOf(MethodArgumentNotValidException.class);
+
+        BindingResult bindingResult = ((MethodArgumentNotValidException) resolvedException).getBindingResult();
+        assertThat(bindingResult.getErrorCount()).isEqualTo(1);
+
+        ObjectError objectError = bindingResult.getAllErrors().get(0);
+        assertThat(objectError.getCode()).isEqualTo("Size");
+        assertThat(objectError.getDefaultMessage()).isEqualTo("아이디는 5자 이상, 20자 미만이여야 합니다.");
     }
 
     @Test
     @DisplayName("비밀번호는 비어 있으면 안된다.")
     void joinWithEmptyPassword() throws Exception {
         // given
-        String password = "      ";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        String password = "            ";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when
@@ -125,8 +181,8 @@ class MemberControllerTest {
     @DisplayName("비밀번호는 4글자보다 길어야 한다.")
     void joinWithTooShortPassword() throws Exception {
         // given
-        String password = "ho3";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        String password = "hong144";
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when
@@ -145,7 +201,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 4자 이상, 20자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 8자 이상, 16자 미만이여야 합니다.");
     }
 
     @Test
@@ -153,7 +209,7 @@ class MemberControllerTest {
     void joinWithTooLongPassword() throws Exception {
         // given
         String password = "hong1443hong1443hong14";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when
@@ -172,7 +228,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 4자 이상, 20자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 8자 이상, 16자 미만이여야 합니다.");
     }
 
     @Test
@@ -180,7 +236,7 @@ class MemberControllerTest {
     void joinWithEmptyNickname() throws Exception {
         // given
         String nickname = "      ";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when
@@ -207,7 +263,7 @@ class MemberControllerTest {
     void joinWithTooShortNickname() throws Exception {
         // given
         String nickname = "홍";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when
@@ -234,7 +290,7 @@ class MemberControllerTest {
     void joinWithTooLongNickname() throws Exception {
         // given
         String nickname = "홍길동홍길동홍길동홍길";
-        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(email, password, nickname);
+        MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
         String content = new ObjectMapper().writeValueAsString(memberJoinRequest);
 
         // when

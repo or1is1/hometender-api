@@ -14,11 +14,11 @@ public class MemberService {
 
     @Transactional
     public MemberJoinResponse join(MemberJoinRequest userSignUpRequest) {
-        String email = userSignUpRequest.email();
+        String loginId = userSignUpRequest.loginId();
         String password = passwordEncoder.encode(userSignUpRequest.password());
         String nickname = userSignUpRequest.nickname();
 
-        Member savedMember = memberRepository.save(new Member(email, password, nickname));
+        Member savedMember = memberRepository.save(new Member(loginId, password, nickname));
 
         return new MemberJoinResponse(savedMember);
     }

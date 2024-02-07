@@ -1,6 +1,5 @@
 package com.or1is1.bartending.api.member;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,17 +17,17 @@ public class Member {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(nullable = false, unique = true)
+    private String loginID;
 
-    @Nonnull
+    @Column(nullable = false)
     private String password;
 
-    @Nonnull
+    @Column(nullable = false, unique = true)
     private String nickname;
 
-    public Member(@Nonnull String email, @Nonnull String password, @Nonnull String nickname) {
-        this.email = email;
+    public Member(String loginID, String password, String nickname) {
+        this.loginID = loginID;
         this.password = password;
         this.nickname = nickname;
     }
