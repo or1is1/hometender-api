@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -35,6 +36,8 @@ class MemberControllerTest {
     private MemberService memberService;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    MessageSource messageSource;
 
 
     // 공통 사용 요소 초기화
@@ -91,7 +94,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("NotBlank");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("공백은 허용되지 않습니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null));
     }
 
     @Test
@@ -119,7 +122,8 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("아이디는 5자 이상, 20자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.loginId", null, null));
+
     }
 
     @Test
@@ -147,7 +151,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("아이디는 5자 이상, 20자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.loginId", null, null));
     }
 
     @Test
@@ -174,7 +178,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("NotBlank");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("공백은 허용되지 않습니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null));
     }
 
     @Test
@@ -201,7 +205,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 8자 이상, 16자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.password", null, null));
     }
 
     @Test
@@ -228,7 +232,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("비밀번호는 8자 이상, 16자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.password", null, null));
     }
 
     @Test
@@ -255,7 +259,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("NotBlank");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("공백은 허용되지 않습니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null));
     }
 
     @Test
@@ -282,7 +286,7 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("닉네임은 2자 이상, 10자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.nickname", null, null));
     }
 
     @Test
@@ -309,6 +313,6 @@ class MemberControllerTest {
 
         ObjectError objectError = bindingResult.getAllErrors().get(0);
         assertThat(objectError.getCode()).isEqualTo("Size");
-        assertThat(objectError.getDefaultMessage()).isEqualTo("닉네임은 2자 이상, 10자 미만이여야 합니다.");
+        assertThat(objectError.getDefaultMessage()).isEqualTo(messageSource.getMessage("validation.constraints.Size.nickname", null, null));
     }
 }
