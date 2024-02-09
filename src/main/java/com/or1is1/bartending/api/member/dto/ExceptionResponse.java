@@ -1,4 +1,4 @@
-package com.or1is1.bartending.api.member;
+package com.or1is1.bartending.api.member.dto;
 
 public record ExceptionResponse(
 		String field,

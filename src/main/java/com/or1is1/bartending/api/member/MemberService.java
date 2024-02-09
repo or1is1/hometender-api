@@ -1,5 +1,8 @@
 package com.or1is1.bartending.api.member;
 
+import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
+import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
+import com.or1is1.bartending.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

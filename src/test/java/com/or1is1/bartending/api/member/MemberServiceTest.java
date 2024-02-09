@@ -1,5 +1,7 @@
 package com.or1is1.bartending.api.member;
 
+import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
+import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
