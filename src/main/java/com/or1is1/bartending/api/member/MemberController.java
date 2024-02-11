@@ -3,6 +3,7 @@ package com.or1is1.bartending.api.member;
 import com.or1is1.bartending.api.CommonResponse;
 import com.or1is1.bartending.api.member.dto.*;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -10,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.or1is1.bartending.api.SessionConst.LOGIN_MEMBER;
 import static java.util.Locale.KOREAN;
 
 @RestController
@@ -38,7 +40,14 @@ public class MemberController {
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<MemberLoginResult> login(@Validated @RequestBody MemberLoginRequest memberLoginRequest) {
-		return new CommonResponse<>(null, memberService.login(memberLoginRequest));
+	public CommonResponse<MemberLoginResult> login(
+			@Validated @RequestBody MemberLoginRequest memberLoginRequest,
+			HttpServletRequest httpServletRequest
+	) {
+		MemberLoginResult memberLoginResult = memberService.login(memberLoginRequest);
+
+		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, memberLoginResult);
+
+		return new CommonResponse<>(null, memberLoginResult);
 	}
 }
