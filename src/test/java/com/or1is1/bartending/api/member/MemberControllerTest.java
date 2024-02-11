@@ -2,8 +2,8 @@ package com.or1is1.bartending.api.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ class MemberControllerTest {
 
 		// when
 		when(memberService.join(any(MemberJoinRequest.class)))
-				.thenReturn(new MemberJoinResponse(1L, nickname));
+				.thenReturn(new MemberJoinResult(1L, nickname));
 
 		ResultActions resultActions = mockMvc.perform(post(url)
 				.contentType(APPLICATION_JSON)
@@ -62,7 +62,7 @@ class MemberControllerTest {
 
 		//then
 		resultActions.andExpect(status().isOk())
-				.andExpect(jsonPath("$.nickname").value(nickname));
+				.andExpect(jsonPath("$.data.nickname").value(nickname));
 	}
 
 	@Test
@@ -81,9 +81,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("loginId"),
-						jsonPath("$.code").value("NotBlank"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null))
 				);
 	}
@@ -104,9 +102,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("loginId"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.loginId", null, null))
 				);
 	}
@@ -127,9 +123,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("loginId"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.loginId", null, null))
 				);
 	}
@@ -150,9 +144,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("password"),
-						jsonPath("$.code").value("NotBlank"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null))
 				);
 	}
@@ -173,9 +165,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("password"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.password", null, null))
 				);
 	}
@@ -196,9 +186,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("password"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.password", null, null))
 				);
 	}
@@ -219,9 +207,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("nickname"),
-						jsonPath("$.code").value("NotBlank"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("jakarta.validation.constraints.NotBlank.message", null, null))
 				);
 	}
@@ -242,9 +228,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("nickname"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.nickname", null, null))
 				);
 	}
@@ -265,9 +249,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpect(status().isBadRequest())
 				.andExpectAll(
-						jsonPath("$.field").value("nickname"),
-						jsonPath("$.code").value("Size"),
-						jsonPath("$.message")
+						jsonPath("$.data[0]")
 								.value(messageSource.getMessage("validation.constraints.Size.nickname", null, null))
 				);
 	}

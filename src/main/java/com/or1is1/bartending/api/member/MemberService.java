@@ -1,7 +1,7 @@
 package com.or1is1.bartending.api.member;
 
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
+import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import com.or1is1.bartending.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,17 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public MemberJoinResponse join(MemberJoinRequest userSignUpRequest) {
-        String loginId = userSignUpRequest.loginId();
-        String password = passwordEncoder.encode(userSignUpRequest.password());
-        String nickname = userSignUpRequest.nickname();
+	@Transactional
+	public MemberJoinResult join(MemberJoinRequest userSignUpRequest) {
+		String loginId = userSignUpRequest.loginId();
+		String password = passwordEncoder.encode(userSignUpRequest.password());
+		String nickname = userSignUpRequest.nickname();
 
-        Member savedMember = memberRepository.save(new Member(loginId, password, nickname));
+		Member savedMember = memberRepository.save(new Member(loginId, password, nickname));
 
-        return new MemberJoinResponse(savedMember);
-    }
+		return new MemberJoinResult(savedMember);
+	}
 }

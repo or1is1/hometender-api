@@ -1,7 +1,8 @@
 package com.or1is1.bartending.api.member;
 
+import com.or1is1.bartending.api.CommonResponse;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
+import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +18,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping
-	public MemberJoinResponse join(@Validated @RequestBody MemberJoinRequest memberJoinRequest) {
-		return memberService.join(memberJoinRequest);
+	public CommonResponse<MemberJoinResult> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest) {
+		return new CommonResponse<>(null, memberService.join(memberJoinRequest));
 	}
 }

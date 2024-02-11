@@ -1,7 +1,7 @@
 package com.or1is1.bartending.api.member;
 
+import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ class MemberServiceTest {
         MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 
         // when
-        MemberJoinResponse userSignResponse = memberService.join(memberJoinRequest);
+        MemberJoinResult userSignResponse = memberService.join(memberJoinRequest);
 
         //then
         assertThat(userSignResponse.nickname()).isEqualTo(nickname);
