@@ -1,7 +1,7 @@
 package com.or1is1.bartending.api.member;
 
 import com.or1is1.bartending.api.member.dto.MemberExistsRequest;
-import com.or1is1.bartending.api.member.dto.MemberExistsResult;
+import com.or1is1.bartending.api.member.dto.MemberIsExistsResult;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
 import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import com.or1is1.bartending.api.member.repository.MemberRepository;
@@ -28,7 +28,7 @@ public class MemberService {
 		return new MemberJoinResult(savedMember);
 	}
 
-	public MemberExistsResult isExists(MemberExistsRequest memberExistsRequest) {
+	public MemberIsExistsResult isExists(MemberExistsRequest memberExistsRequest) {
 		return memberRepository.isExists(memberExistsRequest.loginId(), memberExistsRequest.nickname());
 	}
 }

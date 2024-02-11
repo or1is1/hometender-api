@@ -1,7 +1,7 @@
 package com.or1is1.bartending.api.member.repository;
 
-import com.or1is1.bartending.api.member.dto.MemberExistsResult;
-import com.or1is1.bartending.api.member.dto.QMemberExistsResult;
+import com.or1is1.bartending.api.member.dto.MemberIsExistsResult;
+import com.or1is1.bartending.api.member.dto.QMemberIsExistsResult;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -12,8 +12,8 @@ public class MemberRepositoryImpl implements MemberRepositoryInterface {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public MemberExistsResult isExists(String loginId, String nickname) {
-		return jpaQueryFactory.select(new QMemberExistsResult(
+	public MemberIsExistsResult isExists(String loginId, String nickname) {
+		return jpaQueryFactory.select(new QMemberIsExistsResult(
 						member.loginId.eq(loginId),
 						member.nickname.eq(nickname)))
 				.from(member)

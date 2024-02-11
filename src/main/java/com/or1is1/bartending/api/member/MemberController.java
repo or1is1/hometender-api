@@ -2,10 +2,10 @@ package com.or1is1.bartending.api.member;
 
 import com.or1is1.bartending.api.CommonResponse;
 import com.or1is1.bartending.api.member.dto.MemberExistsRequest;
-import com.or1is1.bartending.api.member.dto.MemberExistsResult;
+import com.or1is1.bartending.api.member.dto.MemberIsExistsResult;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
 import com.or1is1.bartending.api.member.dto.MemberJoinResult;
-import com.or1is1.bartending.api.member.exception.MemberExistsException;
+import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -28,18 +28,18 @@ public class MemberController {
 		try {
 			return new CommonResponse<>(null, memberService.join(memberJoinRequest));
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberExistsException(memberJoinRequest, messageSource.getMessage("member.duplicated", null, KOREAN));
+			throw new MemberAlreadyExistsException(memberJoinRequest, messageSource.getMessage("member.alreadyExists", null, KOREAN));
 		}
 	}
 
 	@GetMapping("/exists")
-	public CommonResponse<MemberExistsResult> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
+	public CommonResponse<MemberIsExistsResult> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
 		return new CommonResponse<>(null, memberService.isExists(memberExistsRequest));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
-	public CommonResponse<MemberExistsResult> memberExistsExceptionHandler(MemberExistsException ex) {
+	public CommonResponse<MemberIsExistsResult> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
 		return new CommonResponse<>(ex.getMessage(), memberService.isExists(ex.getMemberExistsRequest()));
 	}
 }
