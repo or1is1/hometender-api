@@ -2,8 +2,8 @@ package com.or1is1.bartending.api.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
+import com.or1is1.bartending.api.member.dto.MemberJoinResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,10 +52,10 @@ class MemberControllerTest {
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 		String content = objectMapper.writeValueAsString(memberJoinRequest);
 
-		// when
-		when(memberService.join(any(MemberJoinRequest.class)))
-				.thenReturn(new MemberJoinResult(1L, nickname));
+		given(memberService.join(any(MemberJoinRequest.class)))
+				.willReturn(new MemberJoinResult(1L, nickname));
 
+		// when
 		ResultActions resultActions = mockMvc.perform(post(url)
 				.contentType(APPLICATION_JSON)
 				.content(content));
