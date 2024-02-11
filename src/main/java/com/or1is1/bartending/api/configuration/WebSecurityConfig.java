@@ -1,4 +1,4 @@
-package com.or1is1.bartending.api;
+package com.or1is1.bartending.api.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
