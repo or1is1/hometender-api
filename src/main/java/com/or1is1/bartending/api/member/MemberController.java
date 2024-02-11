@@ -1,11 +1,9 @@
 package com.or1is1.bartending.api.member;
 
 import com.or1is1.bartending.api.CommonResponse;
-import com.or1is1.bartending.api.member.dto.MemberExistsRequest;
-import com.or1is1.bartending.api.member.dto.MemberIsExistsResult;
-import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResult;
+import com.or1is1.bartending.api.member.dto.*;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
+import com.or1is1.bartending.api.member.exception.MemberCanNotFindException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -37,9 +35,20 @@ public class MemberController {
 		return new CommonResponse<>(null, memberService.isExists(memberExistsRequest));
 	}
 
+	@PostMapping("/login")
+	public CommonResponse<MemberLoginResult> login(@Validated @RequestBody MemberLoginRequest memberLoginRequest) {
+		return new CommonResponse<>(null, memberService.login(memberLoginRequest));
+	}
+
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
 	public CommonResponse<MemberIsExistsResult> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
 		return new CommonResponse<>(ex.getMessage(), memberService.isExists(ex.getMemberExistsRequest()));
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(BAD_REQUEST)
+	public CommonResponse<MemberIsExistsResult> memberCanNotFindException(MemberCanNotFindException ex) {
+		return new CommonResponse<>(ex.getMessage(), null);
 	}
 }
