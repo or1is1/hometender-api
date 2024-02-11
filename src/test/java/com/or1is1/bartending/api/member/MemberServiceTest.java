@@ -40,15 +40,21 @@ class MemberServiceTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	private final String loginId;
+	private final String password;
+	private final String nickname;
+
+	public MemberServiceTest() {
+		loginId = "loginId";
+		password = "password!";
+		nickname = "nickname";
+	}
+
 	@Test
 	@DisplayName("회원가입 성공")
 	@Transactional
 	void join() {
 		// given
-		String loginId = "hong1443";
-		String password = "hong1443@";
-		String nickname = "홍길동";
-
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 		Member member = new Member(loginId, passwordEncoder.encode(password), nickname);
 
@@ -67,10 +73,6 @@ class MemberServiceTest {
 	@Transactional
 	void JoinWithAlreadyExists() {
 		// given
-		String loginId = "hong1443";
-		String password = "hong1443@";
-		String nickname = "홍길동";
-
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 		Member member = new Member(loginId, passwordEncoder.encode(password), nickname);
 
@@ -87,10 +89,6 @@ class MemberServiceTest {
 	@Transactional
 	void login() {
 		// given
-		String loginId = "hong1443";
-		String password = "hong1443@";
-		String nickname = "홍길동";
-
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
 		String encodedPassword = passwordEncoder.encode(password);
 		Member member = new Member(loginId, encodedPassword, nickname);
@@ -112,10 +110,6 @@ class MemberServiceTest {
 	@Transactional
 	void loginFailWithMemberIsNotExists() {
 		// given
-		String loginId = "hong1443";
-		String password = "hong1443@";
-		String nickname = "홍길동";
-
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
 		String encodedPassword = passwordEncoder.encode(password);
 		Member member = new Member(loginId, encodedPassword, nickname);
@@ -139,10 +133,6 @@ class MemberServiceTest {
 	@Transactional
 	void loginFailWithWrongPassword() {
 		// given
-		String loginId = "hong1443";
-		String password = "hong1443@";
-		String nickname = "홍길동";
-
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
 		String encodedPassword = passwordEncoder.encode(password);
 		Member member = new Member(loginId, encodedPassword, nickname);

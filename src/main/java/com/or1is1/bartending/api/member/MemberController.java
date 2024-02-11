@@ -28,6 +28,10 @@ public class MemberController {
 		}
 	}
 
+	/**
+	 * @return 해당 회원정보를 가진 멤버가 존재한다면 lgoinId과 nickname 에 대해 각각의 중복 정보(true or false) 를 반환한다.
+	 * 해당 회원정보를 가진 멤버가 없다면 false 를 반환하지 않고 null을 반환한다.
+	 */
 	@GetMapping("/exists")
 	public CommonResponse<MemberIsExistsResult> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
 		return new CommonResponse<>(null, memberService.isExists(memberExistsRequest));

@@ -39,9 +39,9 @@ class MemberControllerTest {
 	// 공통 사용 요소 초기화
 	public MemberControllerTest() {
 		objectMapper = new ObjectMapper();
-		loginId = "hong1443";
-		password = "hong1443!";
-		nickname = "홍길동";
+		loginId = "loginId";
+		password = "password!";
+		nickname = "nickname";
 		url = "/api/members";
 	}
 
