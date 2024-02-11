@@ -18,7 +18,7 @@ public class Member {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String loginID;
+    private String loginId;
 
     @Column(nullable = false)
     private String password;
@@ -26,8 +26,8 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    public Member(String loginID, String password, String nickname) {
-        this.loginID = loginID;
+    public Member(String loginId, String password, String nickname) {
+        this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
     }

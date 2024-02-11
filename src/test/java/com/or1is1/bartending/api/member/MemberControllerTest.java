@@ -262,6 +262,13 @@ class MemberControllerTest {
 				.contentType(APPLICATION_JSON)
 				.content(content));
 
-		//thenv
+		//then
+		resultActions.andExpect(status().isBadRequest())
+				.andExpectAll(
+						jsonPath("$.field").value("nickname"),
+						jsonPath("$.code").value("Size"),
+						jsonPath("$.message")
+								.value(messageSource.getMessage("validation.constraints.Size.nickname", null, null))
+				);
 	}
 }
