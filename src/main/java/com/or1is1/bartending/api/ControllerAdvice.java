@@ -14,6 +14,7 @@ import java.util.List;
 
 import static java.util.Locale.KOREAN;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice(basePackages = "com.or1is1.bartending.api")
 @RequiredArgsConstructor
@@ -36,5 +37,13 @@ public class ControllerAdvice {
 		}
 
 		throw new RuntimeException(messageSource.getMessage("exception", null, KOREAN), ex);
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(INTERNAL_SERVER_ERROR)
+	public CommonResponse<Object> exceptionHandler(Exception ex) {
+		log.error(ex.getMessage(), ex);
+
+		return new CommonResponse<>(ex.getMessage(), null);
 	}
 }
