@@ -5,6 +5,8 @@ import com.or1is1.bartending.api.member.dto.*;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -13,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.or1is1.bartending.api.SessionConst.LOGIN_MEMBER;
+import static java.lang.Boolean.TRUE;
 import static java.util.Locale.KOREAN;
 
 @RestController
@@ -64,5 +67,15 @@ public class MemberController {
 		}
 
 		return new CommonResponse<>(null, new MemberLogoutResult(needToInvalidate));
+	}
+
+	@DeleteMapping("/{loginId}")
+	public CommonResponse<Boolean> withdraw(@PathVariable @NotBlank @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
+	                                        String loginId,
+	                                        @Validated @RequestBody MemberWithdrawRequest memberWithdrawRequest) {
+
+		memberService.withdraw(loginId, memberWithdrawRequest);
+
+		return new CommonResponse<>("", TRUE);
 	}
 }
