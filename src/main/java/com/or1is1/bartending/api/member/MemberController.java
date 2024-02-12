@@ -27,7 +27,7 @@ public class MemberController {
 		try {
 			return new CommonResponse<>(null, memberService.join(memberJoinRequest));
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberAlreadyExistsException(memberJoinRequest, messageSource.getMessage("member.alreadyExists", null, KOREAN));
+			throw new MemberAlreadyExistsException(memberJoinRequest, messageSource.getMessage("member.join.alreadyExists", null, KOREAN));
 		}
 	}
 
@@ -53,7 +53,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/logout")
-	public CommonResponse<MemberLogoutResult> lgout(
+	public CommonResponse<MemberLogoutResult> logout(
 			HttpServletRequest httpServletRequest
 	) {
 		HttpSession session = httpServletRequest.getSession(false);
