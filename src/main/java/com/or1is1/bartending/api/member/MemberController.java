@@ -4,6 +4,7 @@ import com.or1is1.bartending.api.CommonResponse;
 import com.or1is1.bartending.api.member.dto.*;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -49,5 +50,19 @@ public class MemberController {
 		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, memberLoginResult);
 
 		return new CommonResponse<>(null, memberLoginResult);
+	}
+
+	@PostMapping("/logout")
+	public CommonResponse<MemberLogoutResult> lgout(
+			HttpServletRequest httpServletRequest
+	) {
+		HttpSession session = httpServletRequest.getSession(false);
+		boolean needToInvalidate = session != null && session.getAttribute(LOGIN_MEMBER) != null;
+
+		if (needToInvalidate) {
+			session.invalidate();
+		}
+
+		return new CommonResponse<>(null, new MemberLogoutResult(needToInvalidate));
 	}
 }
