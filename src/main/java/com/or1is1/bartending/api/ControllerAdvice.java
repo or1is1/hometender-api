@@ -38,12 +38,4 @@ public class ControllerAdvice {
 
 		throw new RuntimeException(messageSource.getMessage("exception", null, KOREAN), ex);
 	}
-
-	@ExceptionHandler
-	@ResponseStatus(INTERNAL_SERVER_ERROR)
-	public CommonResponse<Object> exceptionHandler(Exception ex) {
-		log.error(ex.getMessage(), ex);
-
-		return new CommonResponse<>(ex.getMessage(), null);
-	}
 }

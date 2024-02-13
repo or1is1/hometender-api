@@ -2,11 +2,11 @@ package com.or1is1.bartending.api.member.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 
-public record MemberExistsResult(
+public record MemberIsExistsResult(
 		boolean loginId,
 		boolean nickname
 ) {
 	@QueryProjection
-	public MemberExistsResult {
+	public MemberIsExistsResult {
 	}
 }

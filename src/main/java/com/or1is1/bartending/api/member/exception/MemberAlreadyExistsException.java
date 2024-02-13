@@ -5,10 +5,10 @@ import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
 import lombok.Getter;
 
 @Getter
-public class MemberExistsException extends RuntimeException{
+public class MemberAlreadyExistsException extends RuntimeException {
 	private final MemberExistsRequest memberExistsRequest;
 
-	public MemberExistsException(MemberJoinRequest memberJoinRequest, String message) {
+	public MemberAlreadyExistsException(MemberJoinRequest memberJoinRequest, String message) {
 		super(message);
 		this.memberExistsRequest = new MemberExistsRequest(memberJoinRequest);
 	}
