@@ -52,7 +52,7 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void withdraw(String loginId, MemberWithdrawRequest memberWithdrawRequest) {
+	public Void withdraw(String loginId, MemberWithdrawRequest memberWithdrawRequest) {
 		String password = memberWithdrawRequest.password();
 		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(messageSource.getMessage("member.withdraw.fail", null, KOREAN));
 
@@ -64,5 +64,7 @@ public class MemberService {
 		}
 
 		memberRepository.delete(member);
+
+		return null;
 	}
 }

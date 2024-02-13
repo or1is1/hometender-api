@@ -70,7 +70,8 @@ public class MemberController {
 	}
 
 	@DeleteMapping("/{loginId}")
-	public CommonResponse<Boolean> withdraw(@PathVariable @NotBlank @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
+	public CommonResponse<Boolean> withdraw(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}")
+	                                        @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
 	                                        String loginId,
 	                                        @Validated @RequestBody MemberWithdrawRequest memberWithdrawRequest) {
 

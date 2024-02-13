@@ -1,9 +1,6 @@
 package com.or1is1.bartending.api.member;
 
-import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
-import com.or1is1.bartending.api.member.dto.MemberJoinResult;
-import com.or1is1.bartending.api.member.dto.MemberLoginRequest;
-import com.or1is1.bartending.api.member.dto.MemberLoginResult;
+import com.or1is1.bartending.api.member.dto.*;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
 import com.or1is1.bartending.api.member.exception.MemberCanNotFindException;
 import com.or1is1.bartending.api.member.repository.MemberRepository;
@@ -23,30 +20,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional(readOnly = true)
 class MemberServiceTest {
+	private final String loginId;
+	private final String password;
+	private final String nickname;
 	@Mock
 	private MemberRepository memberRepository;
 	@Mock
 	private PasswordEncoder mockPasswordEncoder;
 	@Mock
 	private MessageSource messageSource;
-
 	@InjectMocks
 	private MemberService memberService;
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private final String loginId;
-	private final String password;
-	private final String nickname;
-
 	public MemberServiceTest() {
 		loginId = "loginId";
-		password = "password!";
+		password = "password";
 		nickname = "nickname";
 	}
 
@@ -145,5 +141,43 @@ class MemberServiceTest {
 		// when then
 		assertThatThrownBy(() -> memberService.login(memberLoginRequest))
 				.isInstanceOf(MemberCanNotFindException.class);
+	}
+
+	@Test
+	@DisplayName("회원탈퇴 성공")
+	@Transactional
+	void withdraw() {
+		// given
+		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
+		String encodedPassword = passwordEncoder.encode(password);
+		Member member = new Member(loginId, encodedPassword, nickname);
+
+		given(memberRepository.findByLoginId(loginId))
+				.willReturn(of(member));
+
+		given(mockPasswordEncoder.matches(password, encodedPassword))
+				.willReturn(true);
+
+		// when
+		memberService.withdraw(loginId, memberWithdrawRequest);
+
+		// then
+		verify(memberRepository, times(1)).delete(member);
+	}
+
+	@Test
+	@DisplayName("회원탈퇴 실패 - 비밀번호가 틀림")
+	@Transactional
+	void withdrawWithWrongPassword() {
+		// given
+		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
+		Member member = new Member(loginId, password, nickname);
+
+		given(memberRepository.findByLoginId(loginId))
+				.willReturn(of(member));
+
+		// when then
+		assertThatThrownBy(() -> memberService.withdraw(loginId, memberWithdrawRequest))
+				.isExactlyInstanceOf(MemberCanNotFindException.class);
 	}
 }
