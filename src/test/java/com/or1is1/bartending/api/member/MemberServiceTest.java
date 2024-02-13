@@ -6,11 +6,12 @@ import com.or1is1.bartending.api.member.exception.MemberCanNotFindException;
 import com.or1is1.bartending.api.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,27 +24,29 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @Transactional(readOnly = true)
 class MemberServiceTest {
 	private final String loginId;
 	private final String password;
 	private final String nickname;
+	private final PasswordEncoder passwordEncoder;
+
 	@Mock
 	private MemberRepository memberRepository;
 	@Mock
 	private PasswordEncoder mockPasswordEncoder;
 	@Mock
 	private MessageSource messageSource;
+
 	@InjectMocks
 	private MemberService memberService;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	public MemberServiceTest() {
 		loginId = "loginId";
 		password = "password";
 		nickname = "nickname";
+		passwordEncoder = new BCryptPasswordEncoder();
 	}
 
 	@Test
@@ -112,14 +115,8 @@ class MemberServiceTest {
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(empty());
-		given(mockPasswordEncoder.matches(password, encodedPassword))
-				.willReturn(true);
 
 		// when then
-		assertThatThrownBy(() -> memberService.login(memberLoginRequest))
-				.isInstanceOf(MemberCanNotFindException.class);
-
-		// then
 		assertThatThrownBy(() -> memberService.login(memberLoginRequest))
 				.isInstanceOf(MemberCanNotFindException.class);
 	}
