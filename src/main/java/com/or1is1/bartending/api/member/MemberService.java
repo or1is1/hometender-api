@@ -50,4 +50,21 @@ public class MemberService {
 	public MemberIsExistsResult isExists(MemberExistsRequest memberExistsRequest) {
 		return memberRepository.isExists(memberExistsRequest.loginId(), memberExistsRequest.nickname());
 	}
+
+	@Transactional
+	public Void withdraw(String loginId, MemberWithdrawRequest memberWithdrawRequest) {
+		String password = memberWithdrawRequest.password();
+		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(messageSource.getMessage("member.withdraw.fail", null, KOREAN));
+
+		Member member = memberRepository.findByLoginId(loginId)
+				.orElseThrow(() -> memberCanNotFindException);
+
+		if (!passwordEncoder.matches(password, member.getPassword())) {
+			throw memberCanNotFindException;
+		}
+
+		memberRepository.delete(member);
+
+		return null;
+	}
 }
