@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.or1is1.bartending.api.member.dto.MemberJoinRequest;
 import com.or1is1.bartending.api.member.dto.MemberLoginRequest;
 import com.or1is1.bartending.api.member.dto.MemberWithdrawRequest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +44,23 @@ class MemberIntegrationTest {
 	@Autowired
 	MemberService memberService;
 
+	private MockHttpSession mockHttpSession;
+
 	public MemberIntegrationTest() {
 		loginId = "loginId";
-		password = "password!";
+		password = "password";
 		nickname = "nickname";
 		url = "/api/members";
+	}
+
+	@BeforeEach
+	public void beforeEach() {
+		mockHttpSession = new MockHttpSession();
+	}
+
+	@AfterEach
+	public void afterEach() {
+		mockHttpSession = null;
 	}
 
 	@Test
@@ -57,8 +71,9 @@ class MemberIntegrationTest {
 		String content = objectMapper.writeValueAsString(memberJoinRequest);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(post(url)
+		ResultActions resultActions = mockMvc.perform(post(url + "/join")
 				.contentType(APPLICATION_JSON)
+				.session(mockHttpSession)
 				.content(content));
 
 		// then
@@ -72,20 +87,16 @@ class MemberIntegrationTest {
 	@DisplayName("로그인 성공")
 	void login() throws Exception {
 		// given
-		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
-		String joinContent = objectMapper.writeValueAsString(memberJoinRequest);
-
-		mockMvc.perform(post(url)
-				.contentType(APPLICATION_JSON)
-				.content(joinContent));
+		join();
 
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String loginContent = objectMapper.writeValueAsString(memberLoginRequest);
+		String content = objectMapper.writeValueAsString(memberLoginRequest);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
 				.contentType(APPLICATION_JSON)
-				.content(loginContent));
+				.session(mockHttpSession)
+				.content(content));
 
 		// then
 		resultActions.andExpectAll(
@@ -100,6 +111,7 @@ class MemberIntegrationTest {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
 		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -109,7 +121,7 @@ class MemberIntegrationTest {
 		// then
 		resultActions.andExpectAll(
 				status().isBadRequest(),
-				jsonPath("$.message").value(messageSource.getMessage("member.login.fail", null, KOREAN))
+				jsonPath("$.message").value(message)
 		);
 	}
 
@@ -134,16 +146,19 @@ class MemberIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("로그아웃 - 기존 로그인 회원 없음")
+	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
+		// given
+		String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
+
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/logout")
 				.contentType(APPLICATION_JSON));
 
 		// then
 		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data.isInvalidated").value(false)
+				status().isBadRequest(),
+				jsonPath("$.message").value(message)
 		);
 	}
 
@@ -151,7 +166,7 @@ class MemberIntegrationTest {
 	@DisplayName("회원 탈퇴")
 	void withdraw() throws Exception {
 		// given
-		join();
+		login(); // login 함수 내부에서 join 호출하기 때문에, join 호출 불필요
 
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
 		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
@@ -159,6 +174,7 @@ class MemberIntegrationTest {
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
 				.contentType(APPLICATION_JSON)
+				.session(mockHttpSession)
 				.content(content));
 
 		// then
@@ -169,21 +185,26 @@ class MemberIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("회원 탈퇴 실패")
+	@DisplayName("회원 탈퇴 실패 - 회원 정보 불일치")
 	void withdrawFail() throws Exception {
 		// given
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
+		login(); // login 함수 내부에서 join 호출하기 때문에, join 호출 불필요
+
+		String wrongPassword = "wrongPassword";
+		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(wrongPassword);
 		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
 				.contentType(APPLICATION_JSON)
+				.session(mockHttpSession)
 				.content(content));
 
 		// then
 		resultActions.andExpectAll(
 				status().isBadRequest(),
-				jsonPath("$.message").value(messageSource.getMessage("member.withdraw.fail", null, KOREAN))
+				jsonPath("$.message").value(message)
 		);
 	}
 }

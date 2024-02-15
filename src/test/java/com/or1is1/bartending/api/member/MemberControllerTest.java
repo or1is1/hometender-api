@@ -61,7 +61,7 @@ class MemberControllerTest {
 				.willReturn(new MemberJoinResult(1L, nickname));
 
 		// when
-		ResultActions resultActions = mockMvc.perform(post(url)
+		ResultActions resultActions = mockMvc.perform(post(url + "/join")
 				.contentType(APPLICATION_JSON)
 				.content(content));
 
@@ -107,8 +107,9 @@ class MemberControllerTest {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
 		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(messageSource.getMessage("member.login.fail", null, KOREAN));
+		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
 
 		given(memberService.login(memberLoginRequest))
 				.willThrow(memberCanNotFindException);
@@ -121,7 +122,7 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isBadRequest(),
-				jsonPath("$.message").value(messageSource.getMessage("member.login.fail", null, KOREAN))
+				jsonPath("$.message").value(message)
 		);
 
 		verify(memberService).login(memberLoginRequest);
@@ -190,8 +191,9 @@ class MemberControllerTest {
 		// given
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
 		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(messageSource.getMessage("member.withdraw.fail", null, KOREAN));
+		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
 
 		given(memberService.withdraw(loginId, memberWithdrawRequest))
 				.willThrow(memberCanNotFindException);
@@ -204,7 +206,7 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isBadRequest(),
-				jsonPath("$.message").value(messageSource.getMessage("member.withdraw.fail", null, KOREAN))
+				jsonPath("$.message").value(message)
 		);
 
 		verify(memberService).withdraw(loginId, memberWithdrawRequest);
