@@ -33,8 +33,7 @@ public class MemberService {
 	public MemberLoginResult login(MemberLoginRequest memberLoginRequest) {
 		String loginId = memberLoginRequest.loginId();
 		String password = memberLoginRequest.password();
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
+		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findByLoginId(loginId)
 				.orElseThrow(() -> memberCanNotFindException);
@@ -53,8 +52,7 @@ public class MemberService {
 	@Transactional
 	public Void withdraw(String loginId, MemberWithdrawRequest memberWithdrawRequest) {
 		String password = memberWithdrawRequest.password();
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
+		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findByLoginId(loginId)
 				.orElseThrow(() -> memberCanNotFindException);

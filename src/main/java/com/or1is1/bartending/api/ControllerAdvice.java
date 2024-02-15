@@ -35,6 +35,8 @@ public class ControllerAdvice {
 					.toList());
 		}
 
-		throw new RuntimeException(messageSource.getMessage("exception", null, KOREAN), ex);
+		String message = messageSource.getMessage("exception", null, KOREAN);
+
+		throw new RuntimeException(message, ex);
 	}
 }

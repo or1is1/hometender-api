@@ -109,10 +109,8 @@ class MemberControllerTest {
 		String content = objectMapper.writeValueAsString(memberLoginRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
-
 		given(memberService.login(memberLoginRequest))
-				.willThrow(memberCanNotFindException);
+				.willThrow(new MemberCanNotFindException());
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -193,10 +191,8 @@ class MemberControllerTest {
 		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException(message);
-
 		given(memberService.withdraw(loginId, memberWithdrawRequest))
-				.willThrow(memberCanNotFindException);
+				.willThrow(new MemberCanNotFindException());
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)

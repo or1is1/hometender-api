@@ -5,10 +5,12 @@ import com.or1is1.bartending.api.member.dto.MemberIsExistsResult;
 import com.or1is1.bartending.api.member.exception.MemberAlreadyExistsException;
 import com.or1is1.bartending.api.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static java.util.Locale.KOREAN;
 import static lombok.AccessLevel.PROTECTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -16,16 +18,19 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RequiredArgsConstructor(access = PROTECTED)
 public class MemberExceptionHandler {
 	private final MemberService memberService;
+	private final MessageSource messageSource;
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
 	public CommonResponse<MemberIsExistsResult> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
-		return new CommonResponse<>(ex.getMessage(), memberService.isExists(ex.getMemberExistsRequest()));
+		String message = messageSource.getMessage("member.exception.alreadyExists", null, KOREAN);
+		return new CommonResponse<>(message, memberService.isExists(ex.getMemberExistsRequest()));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
 	public CommonResponse<MemberIsExistsResult> memberCanNotFindException(MemberCanNotFindException ex) {
-		return new CommonResponse<>(ex.getMessage(), null);
+		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+		return new CommonResponse<>(message, null);
 	}
 }

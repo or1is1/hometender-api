@@ -8,8 +8,7 @@ import lombok.Getter;
 public class MemberAlreadyExistsException extends RuntimeException {
 	private final MemberExistsRequest memberExistsRequest;
 
-	public MemberAlreadyExistsException(MemberJoinRequest memberJoinRequest, String message) {
-		super(message);
+	public MemberAlreadyExistsException(MemberJoinRequest memberJoinRequest) {
 		this.memberExistsRequest = new MemberExistsRequest(memberJoinRequest);
 	}
 }

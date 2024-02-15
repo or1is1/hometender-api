@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.or1is1.bartending.api.StringConst.LOGIN_MEMBER;
 import static java.lang.Boolean.TRUE;
-import static java.util.Locale.KOREAN;
 
 @RestController
 @RequestMapping("/api/members")
@@ -28,9 +27,12 @@ public class MemberController {
 	@PostMapping("/join")
 	public CommonResponse<MemberJoinResult> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest) {
 		try {
-			return new CommonResponse<>(null, memberService.join(memberJoinRequest));
+			MemberJoinResult memberJoinResult = memberService.join(memberJoinRequest);
+
+			return new CommonResponse<>(null, memberJoinResult);
+
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberAlreadyExistsException(memberJoinRequest, messageSource.getMessage("member.exception.alreadyExists", null, KOREAN));
+			throw new MemberAlreadyExistsException(memberJoinRequest);
 		}
 	}
 
