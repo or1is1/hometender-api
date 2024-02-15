@@ -15,7 +15,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.or1is1.bartending.api.SessionConst.LOGIN_MEMBER;
+import static com.or1is1.bartending.api.StringConst.LOGIN_MEMBER;
 import static java.util.Locale.KOREAN;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;

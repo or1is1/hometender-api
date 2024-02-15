@@ -14,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.or1is1.bartending.api.SessionConst.LOGIN_MEMBER;
+import static com.or1is1.bartending.api.StringConst.LOGIN_MEMBER;
 import static java.lang.Boolean.TRUE;
 import static java.util.Locale.KOREAN;
 

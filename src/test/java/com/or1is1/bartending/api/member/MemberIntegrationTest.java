@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.or1is1.bartending.api.SessionConst.LOGIN_MEMBER;
+import static com.or1is1.bartending.api.StringConst.LOGIN_MEMBER;
 import static java.util.Locale.KOREAN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
