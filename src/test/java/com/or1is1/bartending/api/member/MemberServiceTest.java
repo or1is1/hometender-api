@@ -50,7 +50,7 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("회원가입 성공")
+	@DisplayName("회원가입")
 	@Transactional
 	void join() {
 		// given
@@ -84,7 +84,7 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("로그인 성공")
+	@DisplayName("로그인")
 	@Transactional
 	void login() {
 		// given
@@ -141,7 +141,7 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("회원탈퇴 성공")
+	@DisplayName("회원탈퇴")
 	@Transactional
 	void withdraw() {
 		// given

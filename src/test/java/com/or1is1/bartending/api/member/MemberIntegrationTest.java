@@ -64,7 +64,7 @@ class MemberIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("회원가입 성공")
+	@DisplayName("회원가입")
 	void join() throws Exception {
 		// given
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
@@ -84,7 +84,7 @@ class MemberIntegrationTest {
 	}
 
 	@Test
-	@DisplayName("로그인 성공")
+	@DisplayName("로그인")
 	void login() throws Exception {
 		// given
 		join();
@@ -166,7 +166,7 @@ class MemberIntegrationTest {
 	@DisplayName("회원 탈퇴")
 	void withdraw() throws Exception {
 		// given
-		login(); // login 함수 내부에서 join 호출하기 때문에, join 호출 불필요
+		join();
 
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
 		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
@@ -188,7 +188,7 @@ class MemberIntegrationTest {
 	@DisplayName("회원 탈퇴 실패 - 회원 정보 불일치")
 	void withdrawFail() throws Exception {
 		// given
-		login(); // login 함수 내부에서 join 호출하기 때문에, join 호출 불필요
+		join();
 
 		String wrongPassword = "wrongPassword";
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(wrongPassword);

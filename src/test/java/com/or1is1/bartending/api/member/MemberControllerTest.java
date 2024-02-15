@@ -51,7 +51,7 @@ class MemberControllerTest {
 	}
 
 	@Test
-	@DisplayName("회원가입 성공")
+	@DisplayName("회원가입")
 	void join() throws Exception {
 		// given
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
@@ -75,7 +75,7 @@ class MemberControllerTest {
 	}
 
 	@Test
-	@DisplayName("로그인 성공")
+	@DisplayName("로그인")
 	void login() throws Exception {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
@@ -147,7 +147,7 @@ class MemberControllerTest {
 	}
 
 	@Test
-	@DisplayName("로그아웃 - 기존 로그인 회원 없음")
+	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/logout")
@@ -184,7 +184,7 @@ class MemberControllerTest {
 	}
 
 	@Test
-	@DisplayName("회원 탈퇴 실패")
+	@DisplayName("회원 탈퇴 실패 - 회원 정보 불일치")
 	void withdrawFail() throws Exception {
 		// given
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
