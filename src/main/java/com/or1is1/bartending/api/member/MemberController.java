@@ -25,12 +25,16 @@ public class MemberController {
 	private final MessageSource messageSource;
 
 	@PostMapping("/join")
-	public CommonResponse<MemberJoinResult> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest) {
+	public CommonResponse<MemberJoinResult> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest,
+	                                             HttpServletRequest httpServletRequest) {
 		try {
 			MemberJoinResult memberJoinResult = memberService.join(memberJoinRequest);
 
-			return new CommonResponse<>(null, memberJoinResult);
+			MemberLoginRequest memberLoginRequest = new MemberLoginRequest(memberJoinRequest.loginId(), memberJoinRequest.password());
 
+			login(memberLoginRequest, httpServletRequest);
+
+			return new CommonResponse<>(null, memberJoinResult);
 		} catch (DataIntegrityViolationException ex) {
 			throw new MemberAlreadyExistsException(memberJoinRequest);
 		}
