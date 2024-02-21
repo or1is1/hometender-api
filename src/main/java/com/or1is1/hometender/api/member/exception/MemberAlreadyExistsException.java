@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.member.exception;
 
-import com.or1is1.hometender.api.member.dto.MemberExistsRequest;
-import com.or1is1.hometender.api.member.dto.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberExistsRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
 import lombok.Getter;
 
 @Getter

@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.member.dto.MemberIsExistsResult;
+import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
 import com.or1is1.hometender.api.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +22,14 @@ public class MemberExceptionHandler {
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
-	public CommonResponse<MemberIsExistsResult> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
+	public CommonResponse<MemberIsExistsResponse> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
 		String message = messageSource.getMessage("member.exception.alreadyExists", null, KOREAN);
 		return new CommonResponse<>(message, memberService.isExists(ex.getMemberExistsRequest()));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
-	public CommonResponse<MemberIsExistsResult> memberCanNotFindException(MemberCanNotFindException ex) {
+	public CommonResponse<Void> memberCanNotFindException(MemberCanNotFindException ex) {
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 		return new CommonResponse<>(message, null);
 	}

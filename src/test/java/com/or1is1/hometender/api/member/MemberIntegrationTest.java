@@ -2,9 +2,9 @@ package com.or1is1.hometender.api.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.member.dto.MemberJoinRequest;
-import com.or1is1.hometender.api.member.dto.MemberLoginRequest;
-import com.or1is1.hometender.api.member.dto.MemberWithdrawRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -141,7 +141,7 @@ class MemberIntegrationTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.isInvalidated").value(true)
+				jsonPath("$.data").value(true)
 		);
 	}
 
@@ -179,8 +179,7 @@ class MemberIntegrationTest {
 
 		// then
 		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data").value(true)
+				status().isOk()
 		);
 	}
 

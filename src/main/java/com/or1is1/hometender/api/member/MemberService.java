@@ -1,6 +1,11 @@
 package com.or1is1.hometender.api.member;
 
-import com.or1is1.hometender.api.member.dto.*;
+import com.or1is1.hometender.api.member.dto.request.MemberExistsRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.member.dto.MemberLoginResult;
 import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +23,12 @@ public class MemberService {
 	private final MessageSource messageSource;
 
 	@Transactional
-	public MemberJoinResult join(MemberJoinRequest userSignUpRequest) {
+	public void join(MemberJoinRequest userSignUpRequest) {
 		String loginId = userSignUpRequest.loginId();
 		String password = passwordEncoder.encode(userSignUpRequest.password());
 		String nickname = userSignUpRequest.nickname();
 
-		Member savedMember = memberRepository.save(new Member(loginId, password, nickname));
-
-		return new MemberJoinResult(savedMember);
+		memberRepository.save(new Member(loginId, password, nickname));
 	}
 
 	public MemberLoginResult login(MemberLoginRequest memberLoginRequest) {
@@ -43,7 +46,7 @@ public class MemberService {
 		return new MemberLoginResult(member);
 	}
 
-	public MemberIsExistsResult isExists(MemberExistsRequest memberExistsRequest) {
+	public MemberIsExistsResponse isExists(MemberExistsRequest memberExistsRequest) {
 		return memberRepository.isExists(memberExistsRequest.loginId(), memberExistsRequest.nickname());
 	}
 

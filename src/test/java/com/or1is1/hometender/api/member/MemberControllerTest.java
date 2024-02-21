@@ -2,7 +2,10 @@ package com.or1is1.hometender.api.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.member.dto.*;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.member.dto.MemberLoginResult;
 import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,8 +60,11 @@ class MemberControllerTest {
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
 		String content = objectMapper.writeValueAsString(memberJoinRequest);
 
-		given(memberService.join(memberJoinRequest))
-				.willReturn(new MemberJoinResult(1L, nickname));
+		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
+		MemberLoginResult memberLoginResult = new MemberLoginResult(1L, nickname);
+
+		given(memberService.login(memberLoginRequest))
+				.willReturn(memberLoginResult);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/join")
@@ -94,7 +100,6 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.id").value(1L),
 				jsonPath("$.data.nickname").value(nickname)
 		);
 
@@ -142,7 +147,7 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.isInvalidated").value(true)
+				jsonPath("$.data").value(true)
 		);
 	}
 
@@ -156,7 +161,7 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.isInvalidated").value(false)
+				jsonPath("$.data").value(false)
 		);
 	}
 
@@ -176,8 +181,7 @@ class MemberControllerTest {
 
 		// then
 		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data").value(true)
+				status().isOk()
 		);
 
 		verify(memberService).withdraw(loginId, memberWithdrawRequest);

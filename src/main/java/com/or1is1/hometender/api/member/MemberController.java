@@ -1,7 +1,13 @@
 package com.or1is1.hometender.api.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.member.dto.*;
+import com.or1is1.hometender.api.member.dto.request.MemberExistsRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.member.dto.response.MemberLoginResponse;
+import com.or1is1.hometender.api.member.dto.MemberLoginResult;
 import com.or1is1.hometender.api.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +21,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
-import static java.lang.Boolean.TRUE;
 
 @RestController
 @RequestMapping("/api/members")
@@ -25,16 +30,14 @@ public class MemberController {
 	private final MessageSource messageSource;
 
 	@PostMapping("/join")
-	public CommonResponse<MemberJoinResult> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest,
-	                                             HttpServletRequest httpServletRequest) {
+	public CommonResponse<MemberLoginResponse> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest,
+	                                                HttpServletRequest httpServletRequest) {
 		try {
-			MemberJoinResult memberJoinResult = memberService.join(memberJoinRequest);
+			memberService.join(memberJoinRequest);
 
 			MemberLoginRequest memberLoginRequest = new MemberLoginRequest(memberJoinRequest.loginId(), memberJoinRequest.password());
 
-			login(memberLoginRequest, httpServletRequest);
-
-			return new CommonResponse<>(null, memberJoinResult);
+			return login(memberLoginRequest, httpServletRequest);
 		} catch (DataIntegrityViolationException ex) {
 			throw new MemberAlreadyExistsException(memberJoinRequest);
 		}
@@ -45,44 +48,46 @@ public class MemberController {
 	 * 해당 회원정보를 가진 멤버가 없다면 false 를 반환하지 않고 null을 반환한다.
 	 */
 	@GetMapping("/exists")
-	public CommonResponse<MemberIsExistsResult> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
+	public CommonResponse<MemberIsExistsResponse> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
 		return new CommonResponse<>(null, memberService.isExists(memberExistsRequest));
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<MemberLoginResult> login(
+	public CommonResponse<MemberLoginResponse> login(
 			@Validated @RequestBody MemberLoginRequest memberLoginRequest,
 			HttpServletRequest httpServletRequest
 	) {
 		MemberLoginResult memberLoginResult = memberService.login(memberLoginRequest);
 
-		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, memberLoginResult);
+		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, memberLoginResult.id());
 
-		return new CommonResponse<>(null, memberLoginResult);
+		MemberLoginResponse memberLoginResponse = new MemberLoginResponse(memberLoginResult);
+
+		return new CommonResponse<>(null, memberLoginResponse);
 	}
 
 	@PostMapping("/logout")
-	public CommonResponse<MemberLogoutResult> logout(
+	public CommonResponse<Boolean> logout(
 			HttpServletRequest httpServletRequest
 	) {
 		HttpSession session = httpServletRequest.getSession(false);
-		boolean needToInvalidate = session != null && session.getAttribute(LOGIN_MEMBER) != null;
 
-		if (needToInvalidate) {
+		boolean hadInvalidate = session != null;
+		if (hadInvalidate) {
 			session.invalidate();
 		}
 
-		return new CommonResponse<>(null, new MemberLogoutResult(needToInvalidate));
+		return new CommonResponse<>(null, hadInvalidate);
 	}
 
 	@DeleteMapping("/{loginId}")
-	public CommonResponse<Boolean> withdraw(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}")
-	                                        @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
-	                                        String loginId,
-	                                        @Validated @RequestBody MemberWithdrawRequest memberWithdrawRequest) {
+	public CommonResponse<Void> withdraw(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}")
+	                                     @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
+	                                     String loginId,
+	                                     @Validated @RequestBody MemberWithdrawRequest memberWithdrawRequest) {
 
 		memberService.withdraw(loginId, memberWithdrawRequest);
 
-		return new CommonResponse<>("", TRUE);
+		return new CommonResponse<>("", null);
 	}
 }

@@ -1,6 +1,9 @@
 package com.or1is1.hometender.api.member;
 
-import com.or1is1.hometender.api.member.dto.*;
+import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.member.dto.MemberLoginResult;
 import com.or1is1.hometender.api.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.member.repository.MemberRepository;
@@ -11,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +31,6 @@ class MemberServiceTest {
 	private final String loginId;
 	private final String password;
 	private final String nickname;
-	private final PasswordEncoder passwordEncoder;
 
 	@Mock
 	private MemberRepository memberRepository;
@@ -46,7 +46,6 @@ class MemberServiceTest {
 		loginId = "loginId";
 		password = "password";
 		nickname = "nickname";
-		passwordEncoder = new BCryptPasswordEncoder();
 	}
 
 	@Test
@@ -55,16 +54,12 @@ class MemberServiceTest {
 	void join() {
 		// given
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
-		Member member = new Member(loginId, passwordEncoder.encode(password), nickname);
-
-		given(memberRepository.save(any(Member.class)))
-				.willReturn(member);
 
 		// when
-		MemberJoinResult memberJoinResult = memberService.join(memberJoinRequest);
+		memberService.join(memberJoinRequest);
 
 		// then
-		assertThat(memberJoinResult.nickname()).isEqualTo(nickname);
+		verify(memberRepository).save(any(Member.class));
 	}
 
 	@Test
@@ -73,7 +68,6 @@ class MemberServiceTest {
 	void JoinWithAlreadyExists() {
 		// given
 		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
-		Member member = new Member(loginId, passwordEncoder.encode(password), nickname);
 
 		given(memberRepository.save(any(Member.class)))
 				.willThrow(MemberAlreadyExistsException.class);
@@ -89,12 +83,11 @@ class MemberServiceTest {
 	void login() {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String encodedPassword = passwordEncoder.encode(password);
-		Member member = new Member(loginId, encodedPassword, nickname);
+		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(of(member));
-		given(mockPasswordEncoder.matches(password, encodedPassword))
+		given(mockPasswordEncoder.matches(password, password))
 				.willReturn(true);
 
 		// when
@@ -110,8 +103,6 @@ class MemberServiceTest {
 	void loginFailWithMemberIsNotExists() {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String encodedPassword = passwordEncoder.encode(password);
-		Member member = new Member(loginId, encodedPassword, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(empty());
@@ -127,12 +118,11 @@ class MemberServiceTest {
 	void loginFailWithWrongPassword() {
 		// given
 		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String encodedPassword = passwordEncoder.encode(password);
-		Member member = new Member(loginId, encodedPassword, nickname);
+		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(of(member));
-		given(mockPasswordEncoder.matches(password, encodedPassword))
+		given(mockPasswordEncoder.matches(password, password))
 				.willReturn(false);
 
 		// when then
@@ -146,20 +136,19 @@ class MemberServiceTest {
 	void withdraw() {
 		// given
 		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
-		String encodedPassword = passwordEncoder.encode(password);
-		Member member = new Member(loginId, encodedPassword, nickname);
+		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(of(member));
 
-		given(mockPasswordEncoder.matches(password, encodedPassword))
+		given(mockPasswordEncoder.matches(password, password))
 				.willReturn(true);
 
 		// when
 		memberService.withdraw(loginId, memberWithdrawRequest);
 
 		// then
-		verify(memberRepository, times(1)).delete(member);
+		verify(memberRepository).delete(member);
 	}
 
 	@Test
