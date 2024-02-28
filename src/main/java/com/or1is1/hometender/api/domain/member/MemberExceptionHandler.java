@@ -1,9 +1,9 @@
-package com.or1is1.hometender.api.member;
+package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
-import com.or1is1.hometender.api.member.exception.MemberAlreadyExistsException;
-import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
+import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
+import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +14,7 @@ import static java.util.Locale.KOREAN;
 import static lombok.AccessLevel.PROTECTED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-@RestControllerAdvice(basePackages = "com.or1is1.hometender.api.member")
+@RestControllerAdvice(basePackages = "com.or1is1.hometender.api.domain.member")
 @RequiredArgsConstructor(access = PROTECTED)
 public class MemberExceptionHandler {
 	private final MemberService memberService;

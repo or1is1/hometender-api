@@ -1,6 +1,6 @@
-package com.or1is1.hometender.api.member.dto;
+package com.or1is1.hometender.api.domain.member.dto;
 
-import com.or1is1.hometender.api.member.Member;
+import com.or1is1.hometender.api.domain.member.Member;
 
 public record MemberLoginResult(
 		Long id,

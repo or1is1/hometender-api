@@ -1,14 +1,14 @@
-package com.or1is1.hometender.api.member;
+package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.member.dto.request.MemberExistsRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
-import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
-import com.or1is1.hometender.api.member.dto.response.MemberLoginResponse;
-import com.or1is1.hometender.api.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.member.exception.MemberAlreadyExistsException;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberExistsRequest;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.response.MemberLoginResponse;
+import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;

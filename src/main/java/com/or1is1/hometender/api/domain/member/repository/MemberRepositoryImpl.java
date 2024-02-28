@@ -1,12 +1,13 @@
-package com.or1is1.hometender.api.member.repository;
+package com.or1is1.hometender.api.domain.member.repository;
 
-import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
-import com.or1is1.hometender.api.member.dto.response.QMemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.response.QMemberIsExistsResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.or1is1.hometender.api.member.QMember.member;
+import static com.or1is1.hometender.api.domain.member.QMember.member;
+
 
 public class MemberRepositoryImpl implements MemberRepositoryInterface {
 	private final JPAQueryFactory jpaQueryFactory;

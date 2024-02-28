@@ -1,13 +1,13 @@
-package com.or1is1.hometender.api.member;
+package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.member.dto.request.MemberExistsRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.member.dto.request.MemberWithdrawRequest;
-import com.or1is1.hometender.api.member.dto.response.MemberIsExistsResponse;
-import com.or1is1.hometender.api.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.member.exception.MemberCanNotFindException;
-import com.or1is1.hometender.api.member.repository.MemberRepository;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberExistsRequest;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;

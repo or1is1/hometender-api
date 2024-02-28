@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api.member.dto.request;
+package com.or1is1.hometender.api.domain.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

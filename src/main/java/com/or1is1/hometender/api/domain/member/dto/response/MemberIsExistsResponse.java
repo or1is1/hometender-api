@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api.member.dto.response;
+package com.or1is1.hometender.api.domain.member.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 

@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api.member;
+package com.or1is1.hometender.api.domain.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

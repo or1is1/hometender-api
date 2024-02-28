@@ -1,6 +1,6 @@
-package com.or1is1.hometender.api.member.dto.response;
+package com.or1is1.hometender.api.domain.member.dto.response;
 
-import com.or1is1.hometender.api.member.dto.MemberLoginResult;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
 
 public record MemberLoginResponse(
 		String nickname
