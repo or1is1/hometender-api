@@ -3,12 +3,15 @@ package com.or1is1.hometender.api.domain.recipe;
 import com.or1is1.hometender.api.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.EnumType.*;
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Recipe {
 	@Id
 	@GeneratedValue
@@ -27,4 +30,20 @@ public class Recipe {
 	private String manual;
 
 	private boolean isOfficial;
+
+	public Recipe(Member writer, String name, String description, CraftMethod craftMethod, String manual) {
+		this.writer = writer;
+		this.name = name;
+		this.description = description;
+		this.craftMethod = craftMethod;
+		this.manual = manual;
+		isOfficial = false;
+	}
+
+	public void put(String name, String description, CraftMethod craftMethod, String manual) {
+		this.name = name;
+		this.description = description;
+		this.craftMethod = craftMethod;
+		this.manual = manual;
+	}
 }
