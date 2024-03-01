@@ -25,7 +25,7 @@ class IngredientServiceTest {
 	@DisplayName("재료 조회 - 재료를 못찾으면 예외 발생")
 	void get() {
 		// given
-		given(ingredientRepository.findByNameAndWriter(anyString(), any(Member.class)))
+		given(ingredientRepository.findByWriterAndName(any(Member.class), anyString()))
 				.willThrow(IngredientCanNotFindException.class);
 
 		// when then

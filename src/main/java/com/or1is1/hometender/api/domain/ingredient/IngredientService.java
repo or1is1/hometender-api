@@ -31,7 +31,7 @@ public class IngredientService {
 	}
 
 	public IngredientGetResponse get(String name, Long loginId) {
-		Ingredient ingredient = ingredientRepository.findByNameAndWriter(name, new Member(loginId))
+		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		return new IngredientGetResponse(ingredient);
@@ -46,7 +46,7 @@ public class IngredientService {
 
 	@Transactional
 	public void put(String name, Long loginId, IngredientPutRequest ingredientPutRequest) {
-		Ingredient ingredient = ingredientRepository.findByNameAndWriter(name, new Member(loginId))
+		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		ingredient.putIngredient(
@@ -57,6 +57,6 @@ public class IngredientService {
 	}
 
 	public void delete(String name, Long loginId) {
-		ingredientRepository.deleteByName(name, new Member(loginId));
+		ingredientRepository.deleteByWriterAndName(new Member(loginId), name);
 	}
 }

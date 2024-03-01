@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long>, IngredientRepositoryInterface {
 	public List<Ingredient> findByWriter(Member writer);
-	public Optional<Ingredient> findByNameAndWriter(String name, Member writer);
+	public Optional<Ingredient> findByWriterAndName(Member writer, String name);
 
-	public void deleteByName(String name, Member writer);
+	public void deleteByWriterAndName(Member writer, String name);
 }
