@@ -55,4 +55,8 @@ public class IngredientService {
 				ingredientPutRequest.volume()
 		);
 	}
+
+	public void delete(String name, Long loginId) {
+		ingredientRepository.deleteByName(name, new Member(loginId));
+	}
 }

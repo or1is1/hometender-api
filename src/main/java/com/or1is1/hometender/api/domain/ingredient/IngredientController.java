@@ -27,15 +27,6 @@ public class IngredientController {
 		return new CommonResponse<>(null, null);
 	}
 
-	@GetMapping("{name}")
-	public CommonResponse<IngredientGetResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                                           @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
-
-		IngredientGetResponse ingredientGetResponse = ingredientService.get(name, loginId);
-
-		return new CommonResponse<>(null, ingredientGetResponse);
-	}
-
 	@GetMapping
 	public CommonResponse<List<IngredientGetResponse>> getIngredientList(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
 
@@ -44,12 +35,29 @@ public class IngredientController {
 		return new CommonResponse<>(null, ingredientGetResponseList);
 	}
 
-	@PutMapping("{name}")
+	@GetMapping("/{name}")
+	public CommonResponse<IngredientGetResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
+	                                                           @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
+
+		IngredientGetResponse ingredientGetResponse = ingredientService.get(name, loginId);
+
+		return new CommonResponse<>(null, ingredientGetResponse);
+	}
+
+	@PutMapping("/{name}")
 	public CommonResponse<Void> patchIngredient(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId,
 	                                            @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
 	                                            @Validated @RequestBody IngredientPutRequest ingredientPutRequest) {
 
 		ingredientService.put(name, loginId, ingredientPutRequest);
+
+		return new CommonResponse<>(null, null);
+	}
+
+	@DeleteMapping("/{name}")
+	public CommonResponse<Void> deleteIngredient(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId,
+	                                             @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name) {
+		ingredientService.delete(name, loginId);
 
 		return new CommonResponse<>(null, null);
 	}
