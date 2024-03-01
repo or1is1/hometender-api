@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ public class Ingredient {
 	@ManyToOne(fetch = LAZY)
 	private Member writer;
 
+	@NotBlank
 	private String name;
 
 	private String description;
@@ -30,6 +32,12 @@ public class Ingredient {
 
 	Ingredient(Member writer, String name, String description, float volume) {
 		this.writer = writer;
+		this.name = name;
+		this.description = description;
+		this.volume = volume;
+	}
+
+	public void putIngredient(String name, String description, float volume) {
 		this.name = name;
 		this.description = description;
 		this.volume = volume;
