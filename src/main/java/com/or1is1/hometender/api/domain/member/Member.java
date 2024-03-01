@@ -26,6 +26,10 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    public Member(Long id) {
+        this.id = id;
+    }
+
     public Member(String loginId, String password, String nickname) {
         this.loginId = loginId;
         this.password = password;
