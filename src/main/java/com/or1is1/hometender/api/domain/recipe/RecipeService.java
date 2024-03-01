@@ -1,10 +1,13 @@
 package com.or1is1.hometender.api.domain.recipe;
 
+import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.member.Member;
+import com.or1is1.hometender.api.domain.recipe.dto.request.RecipeIngredientRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePostRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePutRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.response.RecipeGetResponse;
+import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecipeService {
 	private final RecipeRepository recipeRepository;
+	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
 	public void post(Long loginId, RecipePostRequest postRequest) {
@@ -28,6 +32,21 @@ public class RecipeService {
 		);
 
 		recipeRepository.save(recipe);
+
+		List<RecipeIngredientRequest> recipeIngredientRequestList = postRequest.recipeIngredientList();
+
+		recipeIngredientRequestList.forEach(
+				recipeIngredientRequest ->
+						recipeIngredientRepository.save(
+								new RecipeIngredient(
+										recipe,
+										new Ingredient(recipeIngredientRequest.ingredientId()),
+										recipeIngredientRequest.size(),
+										recipeIngredientRequest.sizeType(),
+										recipeIngredientRequest.isOptional()
+								)
+						)
+		);
 	}
 
 	public RecipeGetResponse get(String name, Long loginId) {
@@ -57,6 +76,7 @@ public class RecipeService {
 		);
 	}
 
+	@Transactional
 	public void delete(String name, Long loginId) {
 		recipeRepository.deleteByWriterAndName(new Member(loginId), name);
 	}

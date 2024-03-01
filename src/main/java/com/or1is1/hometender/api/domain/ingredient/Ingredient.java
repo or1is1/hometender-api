@@ -30,7 +30,11 @@ public class Ingredient {
 
 	private float volume; // 알콜 도수
 
-	Ingredient(Member writer, String name, String description, float volume) {
+	public Ingredient(Long ingredientId) {
+		this.ingredientId = ingredientId;
+	}
+
+	public Ingredient(Member writer, String name, String description, float volume) {
 		this.writer = writer;
 		this.name = name;
 		this.description = description;

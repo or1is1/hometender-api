@@ -38,7 +38,7 @@ public class RecipeController {
 
 	@GetMapping("/{name}")
 	public CommonResponse<RecipeGetResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                                           @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	                                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
 		RecipeGetResponse recipeGetResponse = recipeService.get(name, memberId);
 
