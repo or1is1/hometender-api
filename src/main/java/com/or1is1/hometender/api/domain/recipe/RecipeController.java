@@ -3,7 +3,8 @@ package com.or1is1.hometender.api.domain.recipe;
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeDetailResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeListResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -29,20 +30,20 @@ public class RecipeController {
 	}
 
 	@GetMapping
-	public CommonResponse<List<GetRecipeResponse>> getRecipeList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<List<GetRecipeListResponse>> getRecipeList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		List<GetRecipeResponse> getRecipeResponseList = recipeService.getList(memberId);
+		List<GetRecipeListResponse> getRecipeListResponseList = recipeService.getList(memberId);
 
-		return new CommonResponse<>(null, getRecipeResponseList);
+		return new CommonResponse<>(null, getRecipeListResponseList);
 	}
 
 	@GetMapping("/{name}")
-	public CommonResponse<GetRecipeResponse> getRecipe(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                                   @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<GetRecipeDetailResponse> getRecipeDetail(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
+	                                                               @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		GetRecipeResponse getRecipeResponse = recipeService.get(name, memberId);
+		GetRecipeDetailResponse getRecipeDetailResponse = recipeService.get(name, memberId);
 
-		return new CommonResponse<>(null, getRecipeResponse);
+		return new CommonResponse<>(null, getRecipeDetailResponse);
 	}
 
 	@PutMapping("/{name}")

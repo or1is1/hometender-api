@@ -3,10 +3,11 @@ package com.or1is1.hometender.api.domain.recipe;
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeIngredientRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeDetailResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,33 +34,35 @@ public class RecipeService {
 
 		recipeRepository.save(recipe);
 
-		List<PostRecipeIngredientRequest> postRecipeIngredientRequestList = postRequest.recipeIngredientList();
+		List<RecipeIngredientDto> recipeIngredientDtoList = postRequest.recipeIngredientList();
 
-		postRecipeIngredientRequestList.forEach(
-				postRecipeIngredientRequest ->
+		recipeIngredientDtoList.forEach(
+				recipeIngredientDto ->
 						recipeIngredientRepository.save(
 								new RecipeIngredient(
 										recipe,
-										new Ingredient(postRecipeIngredientRequest.ingredientId()),
-										postRecipeIngredientRequest.size(),
-										postRecipeIngredientRequest.sizeType(),
-										postRecipeIngredientRequest.isOptional()
+										new Ingredient(recipeIngredientDto.ingredientId()),
+										recipeIngredientDto.size(),
+										recipeIngredientDto.sizeType(),
+										recipeIngredientDto.isOptional()
 								)
 						)
 		);
 	}
 
-	public GetRecipeResponse get(String name, Long loginId) {
+	public GetRecipeDetailResponse get(String name, Long loginId) {
 		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		return new GetRecipeResponse(recipe);
+		List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findByRecipe(recipe);
+
+		return new GetRecipeDetailResponse(recipe, recipeIngredientList);
 	}
 
-	public List<GetRecipeResponse> getList(Long loginId) {
+	public List<GetRecipeListResponse> getList(Long loginId) {
 
 		return recipeRepository.findByWriter(new Member(loginId))
-				.stream().map(GetRecipeResponse::new)
+				.stream().map(GetRecipeListResponse::new)
 				.toList();
 	}
 
