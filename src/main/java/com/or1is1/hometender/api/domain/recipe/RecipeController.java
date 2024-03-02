@@ -1,9 +1,9 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePostRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePutRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.response.RecipeGetResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,37 +20,37 @@ public class RecipeController {
 	private final RecipeService recipeService;
 
 	@PostMapping
-	public CommonResponse<Void> postIngredient(@Validated @RequestBody RecipePostRequest recipePostRequest,
+	public CommonResponse<Void> postIngredient(@Validated @RequestBody PostRecipeRequest postRecipeRequest,
 	                                           @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		recipeService.post(memberId, recipePostRequest);
+		recipeService.post(memberId, postRecipeRequest);
 
 		return new CommonResponse<>(null, null);
 	}
 
 	@GetMapping
-	public CommonResponse<List<RecipeGetResponse>> getIngredientList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<List<GetRecipeResponse>> getIngredientList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		List<RecipeGetResponse> recipeGetResponseList = recipeService.getList(memberId);
+		List<GetRecipeResponse> getRecipeResponseList = recipeService.getList(memberId);
 
-		return new CommonResponse<>(null, recipeGetResponseList);
+		return new CommonResponse<>(null, getRecipeResponseList);
 	}
 
 	@GetMapping("/{name}")
-	public CommonResponse<RecipeGetResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
+	public CommonResponse<GetRecipeResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
 	                                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		RecipeGetResponse recipeGetResponse = recipeService.get(name, memberId);
+		GetRecipeResponse getRecipeResponse = recipeService.get(name, memberId);
 
-		return new CommonResponse<>(null, recipeGetResponse);
+		return new CommonResponse<>(null, getRecipeResponse);
 	}
 
 	@PutMapping("/{name}")
 	public CommonResponse<Void> patchIngredient(@SessionAttribute(LOGIN_MEMBER) Long memberId,
 	                                            @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                            @Validated @RequestBody RecipePutRequest recipePutRequest) {
+	                                            @Validated @RequestBody PutRecipeRequest putRecipeRequest) {
 
-		recipeService.put(name, memberId, recipePutRequest);
+		recipeService.put(name, memberId, putRecipeRequest);
 
 		return new CommonResponse<>(null, null);
 	}

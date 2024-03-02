@@ -3,10 +3,10 @@ package com.or1is1.hometender.api.domain.recipe;
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.recipe.dto.request.RecipeIngredientRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePostRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.request.RecipePutRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.response.RecipeGetResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeIngredientRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeResponse;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class RecipeService {
 	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
-	public void post(Long loginId, RecipePostRequest postRequest) {
+	public void post(Long loginId, PostRecipeRequest postRequest) {
 		Recipe recipe = new Recipe(
 				new Member(loginId),
 				postRequest.name(),
@@ -33,46 +33,46 @@ public class RecipeService {
 
 		recipeRepository.save(recipe);
 
-		List<RecipeIngredientRequest> recipeIngredientRequestList = postRequest.recipeIngredientList();
+		List<PostRecipeIngredientRequest> postRecipeIngredientRequestList = postRequest.recipeIngredientList();
 
-		recipeIngredientRequestList.forEach(
-				recipeIngredientRequest ->
+		postRecipeIngredientRequestList.forEach(
+				postRecipeIngredientRequest ->
 						recipeIngredientRepository.save(
 								new RecipeIngredient(
 										recipe,
-										new Ingredient(recipeIngredientRequest.ingredientId()),
-										recipeIngredientRequest.size(),
-										recipeIngredientRequest.sizeType(),
-										recipeIngredientRequest.isOptional()
+										new Ingredient(postRecipeIngredientRequest.ingredientId()),
+										postRecipeIngredientRequest.size(),
+										postRecipeIngredientRequest.sizeType(),
+										postRecipeIngredientRequest.isOptional()
 								)
 						)
 		);
 	}
 
-	public RecipeGetResponse get(String name, Long loginId) {
+	public GetRecipeResponse get(String name, Long loginId) {
 		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		return new RecipeGetResponse(recipe);
+		return new GetRecipeResponse(recipe);
 	}
 
-	public List<RecipeGetResponse> getList(Long loginId) {
+	public List<GetRecipeResponse> getList(Long loginId) {
 
 		return recipeRepository.findByWriter(new Member(loginId))
-				.stream().map(RecipeGetResponse::new)
+				.stream().map(GetRecipeResponse::new)
 				.toList();
 	}
 
 	@Transactional
-	public void put(String name, Long loginId, RecipePutRequest recipePutRequest) {
+	public void put(String name, Long loginId, PutRecipeRequest putRecipeRequest) {
 		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		recipe.put(
 				name,
-				recipePutRequest.description(),
-				recipePutRequest.craftMethod(),
-				recipePutRequest.manual()
+				putRecipeRequest.description(),
+				putRecipeRequest.craftMethod(),
+				putRecipeRequest.manual()
 		);
 	}
 

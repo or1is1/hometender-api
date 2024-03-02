@@ -4,10 +4,10 @@ import com.or1is1.hometender.api.domain.recipe.CraftMethod;
 
 import java.util.List;
 
-public record RecipePostRequest(
+public record PostRecipeRequest(
 		String name,
 		String description,
-		List<RecipeIngredientRequest> recipeIngredientList,
+		List<PostRecipeIngredientRequest> recipeIngredientList,
 		CraftMethod craftMethod,
 		String manual
 ) {
