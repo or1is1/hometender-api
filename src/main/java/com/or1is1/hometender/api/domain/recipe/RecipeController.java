@@ -20,8 +20,8 @@ public class RecipeController {
 	private final RecipeService recipeService;
 
 	@PostMapping
-	public CommonResponse<Void> postIngredient(@Validated @RequestBody PostRecipeRequest postRecipeRequest,
-	                                           @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<Void> postRecipe(@Validated @RequestBody PostRecipeRequest postRecipeRequest,
+	                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
 		recipeService.post(memberId, postRecipeRequest);
 
@@ -29,7 +29,7 @@ public class RecipeController {
 	}
 
 	@GetMapping
-	public CommonResponse<List<GetRecipeResponse>> getIngredientList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<List<GetRecipeResponse>> getRecipeList(@SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
 		List<GetRecipeResponse> getRecipeResponseList = recipeService.getList(memberId);
 
@@ -37,8 +37,8 @@ public class RecipeController {
 	}
 
 	@GetMapping("/{name}")
-	public CommonResponse<GetRecipeResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<GetRecipeResponse> getRecipe(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
+	                                                   @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
 		GetRecipeResponse getRecipeResponse = recipeService.get(name, memberId);
 
@@ -46,9 +46,9 @@ public class RecipeController {
 	}
 
 	@PutMapping("/{name}")
-	public CommonResponse<Void> patchIngredient(@SessionAttribute(LOGIN_MEMBER) Long memberId,
-	                                            @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                            @Validated @RequestBody PutRecipeRequest putRecipeRequest) {
+	public CommonResponse<Void> patchRecipe(@SessionAttribute(LOGIN_MEMBER) Long memberId,
+	                                        @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
+	                                        @Validated @RequestBody PutRecipeRequest putRecipeRequest) {
 
 		recipeService.put(name, memberId, putRecipeRequest);
 
@@ -56,8 +56,8 @@ public class RecipeController {
 	}
 
 	@DeleteMapping("/{name}")
-	public CommonResponse<Void> deleteIngredient(@SessionAttribute(LOGIN_MEMBER) Long memberId,
-	                                             @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name) {
+	public CommonResponse<Void> deleteRecipe(@SessionAttribute(LOGIN_MEMBER) Long memberId,
+	                                         @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name) {
 		recipeService.delete(name, memberId);
 
 		return new CommonResponse<>(null, null);
