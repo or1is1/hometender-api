@@ -2,7 +2,7 @@ package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.member.MemberService;
-import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import lombok.RequiredArgsConstructor;

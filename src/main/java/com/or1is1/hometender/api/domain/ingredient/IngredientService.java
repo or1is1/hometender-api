@@ -1,8 +1,8 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPostRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPutRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.response.IngredientGetResponse;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPostRequest;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPutRequest;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientGetResponse;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;

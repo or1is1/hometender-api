@@ -2,9 +2,9 @@ package com.or1is1.hometender.api.domain.ingredient;
 
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.StringConst;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPostRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPutRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.response.IngredientGetResponse;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPostRequest;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPutRequest;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientGetResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

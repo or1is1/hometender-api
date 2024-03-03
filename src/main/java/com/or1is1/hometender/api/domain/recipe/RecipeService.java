@@ -5,10 +5,10 @@ import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFin
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
-import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeDetailResponse;
-import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeListResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.PostRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.PutRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeDetailResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;

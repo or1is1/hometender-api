@@ -2,11 +2,9 @@ package com.or1is1.hometender.api.domain.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.member.MemberService;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,9 +1,9 @@
 package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;

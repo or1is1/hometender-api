@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api.domain.ingredient.dto.response;
+package com.or1is1.hometender.api.domain.ingredient.dto;
 
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 

@@ -3,9 +3,9 @@ package com.or1is1.hometender.api.domain.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

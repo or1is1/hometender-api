@@ -2,12 +2,12 @@ package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberExistsRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
-import com.or1is1.hometender.api.domain.member.dto.response.MemberLoginResponse;
+import com.or1is1.hometender.api.domain.member.dto.MemberExistsRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.MemberLoginResponse;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

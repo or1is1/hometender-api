@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
