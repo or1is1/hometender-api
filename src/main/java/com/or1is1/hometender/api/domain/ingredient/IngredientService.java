@@ -17,10 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class IngredientService {
+
 	private final IngredientRepository ingredientRepository;
 
 	@Transactional
 	public void post(Long loginId, IngredientPostRequest addRequest) {
+
 		Ingredient ingredient = new Ingredient(
 				new Member(loginId),
 				addRequest.name(),
@@ -38,16 +40,18 @@ public class IngredientService {
 				.toList();
 	}
 
-	public IngredientGetResponse get(String name, Long loginId) {
-		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
+	public IngredientGetResponse get(Long ingredientId, Long loginId) {
+
+		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		return new IngredientGetResponse(ingredient);
 	}
 
 	@Transactional
-	public void put(String name, Long loginId, IngredientPutRequest ingredientPutRequest) {
-		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
+	public void put(Long ingredientId, Long loginId, IngredientPutRequest ingredientPutRequest) {
+
+		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		if (!loginId.equals(ingredient.getWriter().getId())) {
@@ -55,15 +59,15 @@ public class IngredientService {
 		}
 
 		ingredient.putIngredient(
-				name,
+				ingredientPutRequest.name(),
 				ingredientPutRequest.description(),
 				ingredientPutRequest.volume()
 		);
 	}
 
 	@Transactional
-	public void delete(String name, Long loginId) {
+	public void delete(Long ingredientId, Long loginId) {
 
-		ingredientRepository.deleteByWriterAndName(new Member(loginId), name);
+		ingredientRepository.deleteByIngredientIdAndWriter(ingredientId, new Member(loginId));
 	}
 }

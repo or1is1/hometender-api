@@ -20,11 +20,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
+
 	private final RecipeRepository recipeRepository;
 	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
 	public void post(Long loginId, PostRecipeRequest postRequest) {
+
 		Recipe recipe = new Recipe(
 				new Member(loginId),
 				postRequest.name(),
@@ -58,8 +60,9 @@ public class RecipeService {
 				.toList();
 	}
 
-	public GetRecipeDetailResponse get(String name, Long loginId) {
-		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
+	public GetRecipeDetailResponse get(Long recipeId, Long loginId) {
+
+		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findByRecipe(recipe);
@@ -68,8 +71,9 @@ public class RecipeService {
 	}
 
 	@Transactional
-	public void put(String name, Long loginId, PutRecipeRequest putRecipeRequest) {
-		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
+	public void put(Long recipeId, Long loginId, PutRecipeRequest putRecipeRequest) {
+
+		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		if (!loginId.equals(recipe.getWriter().getId())) {
@@ -77,7 +81,7 @@ public class RecipeService {
 		}
 
 		recipe.put(
-				name,
+				putRecipeRequest.name(),
 				putRecipeRequest.description(),
 				putRecipeRequest.craftMethod(),
 				putRecipeRequest.manual()
@@ -85,7 +89,8 @@ public class RecipeService {
 	}
 
 	@Transactional
-	public void delete(String name, Long loginId) {
-		recipeRepository.deleteByWriterAndName(new Member(loginId), name);
+	public void delete(Long recipeId, Long loginId) {
+
+		recipeRepository.deleteByRecipeIdAndWriter(recipeId, new Member(loginId));
 	}
 }
