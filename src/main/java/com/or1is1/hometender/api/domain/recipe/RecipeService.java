@@ -2,6 +2,7 @@ package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
+import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
@@ -50,6 +51,13 @@ public class RecipeService {
 		);
 	}
 
+	public List<GetRecipeListResponse> getList(Long loginId) {
+
+		return recipeRepository.findByWriter(new Member(loginId))
+				.stream().map(GetRecipeListResponse::new)
+				.toList();
+	}
+
 	public GetRecipeDetailResponse get(String name, Long loginId) {
 		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
@@ -59,17 +67,14 @@ public class RecipeService {
 		return new GetRecipeDetailResponse(recipe, recipeIngredientList);
 	}
 
-	public List<GetRecipeListResponse> getList(Long loginId) {
-
-		return recipeRepository.findByWriter(new Member(loginId))
-				.stream().map(GetRecipeListResponse::new)
-				.toList();
-	}
-
 	@Transactional
 	public void put(String name, Long loginId, PutRecipeRequest putRecipeRequest) {
 		Recipe recipe = recipeRepository.findByWriterAndName(new Member(loginId), name)
 				.orElseThrow(IngredientCanNotFindException::new);
+
+		if (!loginId.equals(recipe.getWriter().getId())) {
+			throw new IngredientIsNotMineException();
+		}
 
 		recipe.put(
 				name,

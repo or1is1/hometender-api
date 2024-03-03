@@ -5,6 +5,7 @@ import com.or1is1.hometender.api.domain.recipe.dto.request.PostRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.request.PutRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeDetailResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.response.GetRecipeListResponse;
+import com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,10 @@ public class RecipeController {
 	@PostMapping
 	public CommonResponse<Void> postRecipe(@Validated @RequestBody PostRecipeRequest postRecipeRequest,
 	                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+
+		if (postRecipeRequest.recipeIngredientList() == null) {
+			throw new RecipeIngredientIsEmptyException();
+		}
 
 		recipeService.post(memberId, postRecipeRequest);
 
