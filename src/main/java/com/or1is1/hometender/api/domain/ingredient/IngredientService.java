@@ -1,8 +1,7 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
-import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPostRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.IngredientPutRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.IngredientGetResponse;
+import com.or1is1.hometender.api.domain.ingredient.dto.PostAndPutIngredientRequest;
+import com.or1is1.hometender.api.domain.ingredient.dto.GetIngredientResponse;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
@@ -21,7 +20,7 @@ public class IngredientService {
 	private final IngredientRepository ingredientRepository;
 
 	@Transactional
-	public void post(Long loginId, IngredientPostRequest addRequest) {
+	public void post(Long loginId, PostAndPutIngredientRequest addRequest) {
 
 		Ingredient ingredient = new Ingredient(
 				new Member(loginId),
@@ -33,23 +32,23 @@ public class IngredientService {
 		ingredientRepository.save(ingredient);
 	}
 
-	public List<IngredientGetResponse> getList(Long loginId) {
+	public List<GetIngredientResponse> getList(Long loginId) {
 
 		return ingredientRepository.findByWriter(new Member(loginId))
-				.stream().map(IngredientGetResponse::new)
+				.stream().map(GetIngredientResponse::new)
 				.toList();
 	}
 
-	public IngredientGetResponse get(Long ingredientId, Long loginId) {
+	public GetIngredientResponse get(Long ingredientId, Long loginId) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		return new IngredientGetResponse(ingredient);
+		return new GetIngredientResponse(ingredient);
 	}
 
 	@Transactional
-	public void put(Long ingredientId, Long loginId, IngredientPutRequest ingredientPutRequest) {
+	public void put(Long ingredientId, Long loginId, PostAndPutIngredientRequest postAndPutIngredientRequest) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
@@ -59,9 +58,9 @@ public class IngredientService {
 		}
 
 		ingredient.putIngredient(
-				ingredientPutRequest.name(),
-				ingredientPutRequest.description(),
-				ingredientPutRequest.volume()
+				postAndPutIngredientRequest.name(),
+				postAndPutIngredientRequest.description(),
+				postAndPutIngredientRequest.volume()
 		);
 	}
 

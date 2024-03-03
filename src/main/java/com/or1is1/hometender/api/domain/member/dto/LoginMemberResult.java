@@ -2,11 +2,11 @@ package com.or1is1.hometender.api.domain.member.dto;
 
 import com.or1is1.hometender.api.domain.member.Member;
 
-public record MemberLoginResult(
+public record LoginMemberResult(
 		Long id,
 		String nickname
 ) {
-	public MemberLoginResult(Member member) {
+	public LoginMemberResult(Member member) {
 		this(member.getId(), member.getNickname());
 	}
 }

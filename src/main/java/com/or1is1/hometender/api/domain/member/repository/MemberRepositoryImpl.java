@@ -1,6 +1,6 @@
 package com.or1is1.hometender.api.domain.member.repository;
 
-import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 import com.or1is1.hometender.api.domain.member.dto.QMemberIsExistsResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -18,7 +18,7 @@ public class MemberRepositoryImpl implements MemberRepositoryInterface {
 	}
 
 	@Override
-	public MemberIsExistsResponse isExists(String loginId, String nickname) {
+	public IsExistMemberResponse isExists(String loginId, String nickname) {
 		return jpaQueryFactory.select(new QMemberIsExistsResponse(
 						member.loginId.eq(loginId),
 						member.nickname.eq(nickname)))

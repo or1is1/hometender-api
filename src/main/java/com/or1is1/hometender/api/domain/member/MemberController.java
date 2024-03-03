@@ -1,13 +1,8 @@
 package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.MemberExistsRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
-import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginResponse;
+import com.or1is1.hometender.api.domain.member.dto.*;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,16 +25,16 @@ public class MemberController {
 	private final MessageSource messageSource;
 
 	@PostMapping("/join")
-	public CommonResponse<MemberLoginResponse> join(@Validated @RequestBody MemberJoinRequest memberJoinRequest,
+	public CommonResponse<LoginMemberResponse> join(@Validated @RequestBody PostMemberRequest postMemberRequest,
 	                                                HttpServletRequest httpServletRequest) {
 		try {
-			memberService.join(memberJoinRequest);
+			memberService.join(postMemberRequest);
 
-			MemberLoginRequest memberLoginRequest = new MemberLoginRequest(memberJoinRequest.loginId(), memberJoinRequest.password());
+			LoginMemberRequest loginMemberRequest = new LoginMemberRequest(postMemberRequest.loginId(), postMemberRequest.password());
 
-			return login(memberLoginRequest, httpServletRequest);
+			return login(loginMemberRequest, httpServletRequest);
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberAlreadyExistsException(memberJoinRequest);
+			throw new MemberAlreadyExistsException(postMemberRequest);
 		}
 	}
 
@@ -48,22 +43,22 @@ public class MemberController {
 	 * 해당 회원정보를 가진 멤버가 없다면 false 를 반환하지 않고 null을 반환한다.
 	 */
 	@GetMapping("/exists")
-	public CommonResponse<MemberIsExistsResponse> exists(@Validated @RequestBody MemberExistsRequest memberExistsRequest) {
-		return new CommonResponse<>(null, memberService.isExists(memberExistsRequest));
+	public CommonResponse<IsExistMemberResponse> exists(@Validated @RequestBody IsExistMemberRequest isExistMemberRequest) {
+		return new CommonResponse<>(null, memberService.isExists(isExistMemberRequest));
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<MemberLoginResponse> login(
-			@Validated @RequestBody MemberLoginRequest memberLoginRequest,
+	public CommonResponse<LoginMemberResponse> login(
+			@Validated @RequestBody LoginMemberRequest loginMemberRequest,
 			HttpServletRequest httpServletRequest
 	) {
-		MemberLoginResult memberLoginResult = memberService.login(memberLoginRequest);
+		LoginMemberResult loginMemberResult = memberService.login(loginMemberRequest);
 
-		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, memberLoginResult.id());
+		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, loginMemberResult.id());
 
-		MemberLoginResponse memberLoginResponse = new MemberLoginResponse(memberLoginResult);
+		LoginMemberResponse loginMemberResponse = new LoginMemberResponse(loginMemberResult);
 
-		return new CommonResponse<>(null, memberLoginResponse);
+		return new CommonResponse<>(null, loginMemberResponse);
 	}
 
 	@PostMapping("/logout")
@@ -84,9 +79,9 @@ public class MemberController {
 	public CommonResponse<Void> withdraw(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}")
 	                                     @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
 	                                     String loginId,
-	                                     @Validated @RequestBody MemberWithdrawRequest memberWithdrawRequest) {
+	                                     @Validated @RequestBody DeleteMemberRequest deleteMemberRequest) {
 
-		memberService.withdraw(loginId, memberWithdrawRequest);
+		memberService.withdraw(loginId, deleteMemberRequest);
 
 		return new CommonResponse<>("", null);
 	}

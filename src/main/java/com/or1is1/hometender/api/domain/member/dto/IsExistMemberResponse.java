@@ -2,11 +2,11 @@ package com.or1is1.hometender.api.domain.member.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 
-public record MemberIsExistsResponse(
+public record IsExistMemberResponse(
 		boolean loginId,
 		boolean nickname
 ) {
 	@QueryProjection
-	public MemberIsExistsResponse {
+	public IsExistMemberResponse {
 	}
 }

@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.member.repository;
 
-import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 
 public interface MemberRepositoryInterface {
-	public MemberIsExistsResponse isExists(String loginId, String nickname);
+	public IsExistMemberResponse isExists(String loginId, String nickname);
 }

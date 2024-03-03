@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.member.repository;
 
 import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.member.dto.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,21 +35,21 @@ class MemberRepositoryImplTest {
 		memberRepository.save(member);
 
 		// when
-		MemberIsExistsResponse memberIsExistsResponse1 = memberRepository.isExists(loginId, nickname);
-		MemberIsExistsResponse memberIsExistsResponse2 = memberRepository.isExists(loginId, nickname2);
-		MemberIsExistsResponse memberIsExistsResponse3 = memberRepository.isExists(loginId2, nickname);
-		MemberIsExistsResponse memberIsExistsResponse4 = memberRepository.isExists(loginId2, nickname2);
+		IsExistMemberResponse isExistMemberResponse1 = memberRepository.isExists(loginId, nickname);
+		IsExistMemberResponse isExistMemberResponse2 = memberRepository.isExists(loginId, nickname2);
+		IsExistMemberResponse isExistMemberResponse3 = memberRepository.isExists(loginId2, nickname);
+		IsExistMemberResponse isExistMemberResponse4 = memberRepository.isExists(loginId2, nickname2);
 
 		// then
-		assertThat(memberIsExistsResponse1.loginId()).isEqualTo(true);
-		assertThat(memberIsExistsResponse1.nickname()).isEqualTo(true);
+		assertThat(isExistMemberResponse1.loginId()).isEqualTo(true);
+		assertThat(isExistMemberResponse1.nickname()).isEqualTo(true);
 
-		assertThat(memberIsExistsResponse2.loginId()).isEqualTo(true);
-		assertThat(memberIsExistsResponse2.nickname()).isEqualTo(false);
+		assertThat(isExistMemberResponse2.loginId()).isEqualTo(true);
+		assertThat(isExistMemberResponse2.nickname()).isEqualTo(false);
 
-		assertThat(memberIsExistsResponse3.loginId()).isEqualTo(false);
-		assertThat(memberIsExistsResponse3.nickname()).isEqualTo(true);
+		assertThat(isExistMemberResponse3.loginId()).isEqualTo(false);
+		assertThat(isExistMemberResponse3.nickname()).isEqualTo(true);
 
-		assertThat(memberIsExistsResponse4).isNull();
+		assertThat(isExistMemberResponse4).isNull();
 	}
 }

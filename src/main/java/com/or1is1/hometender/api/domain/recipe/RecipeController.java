@@ -1,8 +1,7 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.recipe.dto.PostRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.PutRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.PostAndPutRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeDetailResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException;
@@ -22,14 +21,14 @@ public class RecipeController {
 	private final RecipeService recipeService;
 
 	@PostMapping
-	public CommonResponse<Void> postRecipe(@Validated @RequestBody PostRecipeRequest postRecipeRequest,
+	public CommonResponse<Void> postRecipe(@Validated @RequestBody PostAndPutRecipeRequest postAndPutRecipeRequest,
 	                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		if (postRecipeRequest.recipeIngredientList() == null) {
+		if (postAndPutRecipeRequest.recipeIngredientList() == null) {
 			throw new RecipeIngredientIsEmptyException();
 		}
 
-		recipeService.post(memberId, postRecipeRequest);
+		recipeService.post(memberId, postAndPutRecipeRequest);
 
 		return new CommonResponse<>(null, null);
 	}
@@ -54,9 +53,9 @@ public class RecipeController {
 	@PutMapping("/{recipeId}")
 	public CommonResponse<Void> putRecipe(@PathVariable Long recipeId,
 	                                      @SessionAttribute(LOGIN_MEMBER) Long memberId,
-	                                      @Validated @RequestBody PutRecipeRequest putRecipeRequest) {
+	                                      @Validated @RequestBody PostAndPutRecipeRequest postAndPutRecipeRequest) {
 
-		recipeService.put(recipeId, memberId, putRecipeRequest);
+		recipeService.put(recipeId, memberId, postAndPutRecipeRequest);
 
 		return new CommonResponse<>(null, null);
 	}

@@ -2,9 +2,9 @@ package com.or1is1.hometender.api.domain.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,8 +67,8 @@ class MemberIntegrationTest {
 	@DisplayName("회원가입")
 	void join() throws Exception {
 		// given
-		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
-		String content = objectMapper.writeValueAsString(memberJoinRequest);
+		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
+		String content = objectMapper.writeValueAsString(postMemberRequest);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/join")
@@ -89,8 +89,8 @@ class MemberIntegrationTest {
 		// given
 		join();
 
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		String content = objectMapper.writeValueAsString(loginMemberRequest);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -109,8 +109,8 @@ class MemberIntegrationTest {
 	@DisplayName("로그인 실패 - 회원 정보 불일치")
 	void loginFail() throws Exception {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		String content = objectMapper.writeValueAsString(loginMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		// when
@@ -168,8 +168,8 @@ class MemberIntegrationTest {
 		// given
 		join();
 
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
-		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
+		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
@@ -190,8 +190,8 @@ class MemberIntegrationTest {
 		join();
 
 		String wrongPassword = "wrongPassword";
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(wrongPassword);
-		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(wrongPassword);
+		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		// when

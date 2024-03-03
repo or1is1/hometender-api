@@ -1,9 +1,9 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberResult;
+import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
@@ -47,10 +47,10 @@ class MemberServiceTest {
 	@DisplayName("회원가입")
 	void join() {
 		// given
-		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
+		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
 
 		// when
-		memberService.join(memberJoinRequest);
+		memberService.join(postMemberRequest);
 
 		// then
 		verify(memberRepository).save(any(Member.class));
@@ -60,13 +60,13 @@ class MemberServiceTest {
 	@DisplayName("회원가입 실패 - 중복")
 	void JoinWithAlreadyExists() {
 		// given
-		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
+		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
 
 		given(memberRepository.save(any(Member.class)))
 				.willThrow(MemberAlreadyExistsException.class);
 
 		// when then
-		assertThatThrownBy(() -> memberService.join(memberJoinRequest))
+		assertThatThrownBy(() -> memberService.join(postMemberRequest))
 				.isInstanceOf(MemberAlreadyExistsException.class);
 	}
 
@@ -74,7 +74,7 @@ class MemberServiceTest {
 	@DisplayName("로그인")
 	void login() {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
 		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
@@ -83,23 +83,23 @@ class MemberServiceTest {
 				.willReturn(true);
 
 		// when
-		MemberLoginResult memberLoginResult = memberService.login(memberLoginRequest);
+		LoginMemberResult loginMemberResult = memberService.login(loginMemberRequest);
 
 		// then
-		assertThat(memberLoginResult.nickname()).isEqualTo(nickname);
+		assertThat(loginMemberResult.nickname()).isEqualTo(nickname);
 	}
 
 	@Test
 	@DisplayName("로그인 실패 - 회원 정보 없음")
 	void loginFailWithMemberIsNotExists() {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(empty());
 
 		// when then
-		assertThatThrownBy(() -> memberService.login(memberLoginRequest))
+		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
 				.isInstanceOf(MemberCanNotFindException.class);
 	}
 
@@ -107,7 +107,7 @@ class MemberServiceTest {
 	@DisplayName("로그인 실패 - 비밀번호가 틀림")
 	void loginFailWithWrongPassword() {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
 		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
@@ -116,7 +116,7 @@ class MemberServiceTest {
 				.willReturn(false);
 
 		// when then
-		assertThatThrownBy(() -> memberService.login(memberLoginRequest))
+		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
 				.isInstanceOf(MemberCanNotFindException.class);
 	}
 
@@ -124,7 +124,7 @@ class MemberServiceTest {
 	@DisplayName("회원탈퇴")
 	void withdraw() {
 		// given
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
@@ -134,7 +134,7 @@ class MemberServiceTest {
 				.willReturn(true);
 
 		// when
-		memberService.withdraw(loginId, memberWithdrawRequest);
+		memberService.withdraw(loginId, deleteMemberRequest);
 
 		// then
 		verify(memberRepository).delete(member);
@@ -144,14 +144,14 @@ class MemberServiceTest {
 	@DisplayName("회원탈퇴 실패 - 비밀번호가 틀림")
 	void withdrawWithWrongPassword() {
 		// given
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		Member member = new Member(loginId, password, nickname);
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(of(member));
 
 		// when then
-		assertThatThrownBy(() -> memberService.withdraw(loginId, memberWithdrawRequest))
+		assertThatThrownBy(() -> memberService.withdraw(loginId, deleteMemberRequest))
 				.isExactlyInstanceOf(MemberCanNotFindException.class);
 	}
 }

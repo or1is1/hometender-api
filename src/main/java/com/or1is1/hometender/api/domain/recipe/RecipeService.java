@@ -5,8 +5,7 @@ import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFin
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
-import com.or1is1.hometender.api.domain.recipe.dto.PostRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.PutRecipeRequest;
+import com.or1is1.hometender.api.domain.recipe.dto.PostAndPutRecipeRequest;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeDetailResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
@@ -25,7 +24,7 @@ public class RecipeService {
 	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
-	public void post(Long loginId, PostRecipeRequest postRequest) {
+	public void post(Long loginId, PostAndPutRecipeRequest postRequest) {
 
 		Recipe recipe = new Recipe(
 				new Member(loginId),
@@ -71,7 +70,7 @@ public class RecipeService {
 	}
 
 	@Transactional
-	public void put(Long recipeId, Long loginId, PutRecipeRequest putRecipeRequest) {
+	public void put(Long recipeId, Long loginId, PostAndPutRecipeRequest postAndPutRecipeRequest) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
@@ -81,10 +80,10 @@ public class RecipeService {
 		}
 
 		recipe.put(
-				putRecipeRequest.name(),
-				putRecipeRequest.description(),
-				putRecipeRequest.craftMethod(),
-				putRecipeRequest.manual()
+				postAndPutRecipeRequest.name(),
+				postAndPutRecipeRequest.description(),
+				postAndPutRecipeRequest.craftMethod(),
+				postAndPutRecipeRequest.manual()
 		);
 	}
 
