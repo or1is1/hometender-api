@@ -5,8 +5,7 @@ import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFin
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
-import com.or1is1.hometender.api.domain.recipe.dto.PostAndPutRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeDetailResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
@@ -24,7 +23,7 @@ public class RecipeService {
 	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
-	public void post(Long loginId, PostAndPutRecipeRequest postRequest) {
+	public void post(Long loginId, RecipeDto postRequest) {
 
 		Recipe recipe = new Recipe(
 				new Member(loginId),
@@ -59,18 +58,18 @@ public class RecipeService {
 				.toList();
 	}
 
-	public GetRecipeDetailResponse get(Long recipeId, Long loginId) {
+	public RecipeDto get(Long recipeId, Long loginId) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
 		List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findByRecipe(recipe);
 
-		return new GetRecipeDetailResponse(recipe, recipeIngredientList);
+		return new RecipeDto(recipe, recipeIngredientList);
 	}
 
 	@Transactional
-	public void put(Long recipeId, Long loginId, PostAndPutRecipeRequest postAndPutRecipeRequest) {
+	public void put(Long recipeId, Long loginId, RecipeDto recipeDto) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
@@ -80,11 +79,13 @@ public class RecipeService {
 		}
 
 		recipe.put(
-				postAndPutRecipeRequest.name(),
-				postAndPutRecipeRequest.description(),
-				postAndPutRecipeRequest.craftMethod(),
-				postAndPutRecipeRequest.manual()
+				recipeDto.name(),
+				recipeDto.description(),
+				recipeDto.craftMethod(),
+				recipeDto.manual()
 		);
+
+		List<RecipeIngredientDto> recipeIngredientDtoList = recipeDto.recipeIngredientList();
 	}
 
 	@Transactional

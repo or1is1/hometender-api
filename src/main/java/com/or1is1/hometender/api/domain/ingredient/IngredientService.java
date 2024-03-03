@@ -1,7 +1,6 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
-import com.or1is1.hometender.api.domain.ingredient.dto.PostAndPutIngredientRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.GetIngredientResponse;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
@@ -20,7 +19,7 @@ public class IngredientService {
 	private final IngredientRepository ingredientRepository;
 
 	@Transactional
-	public void post(Long loginId, PostAndPutIngredientRequest addRequest) {
+	public void post(Long loginId, IngredientDto addRequest) {
 
 		Ingredient ingredient = new Ingredient(
 				new Member(loginId),
@@ -32,23 +31,23 @@ public class IngredientService {
 		ingredientRepository.save(ingredient);
 	}
 
-	public List<GetIngredientResponse> getList(Long loginId) {
+	public List<IngredientDto> getList(Long loginId) {
 
 		return ingredientRepository.findByWriter(new Member(loginId))
-				.stream().map(GetIngredientResponse::new)
+				.stream().map(IngredientDto::new)
 				.toList();
 	}
 
-	public GetIngredientResponse get(Long ingredientId, Long loginId) {
+	public IngredientDto get(Long ingredientId, Long loginId) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		return new GetIngredientResponse(ingredient);
+		return new IngredientDto(ingredient);
 	}
 
 	@Transactional
-	public void put(Long ingredientId, Long loginId, PostAndPutIngredientRequest postAndPutIngredientRequest) {
+	public void put(Long ingredientId, Long loginId, IngredientDto ingredientDto) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
@@ -58,9 +57,9 @@ public class IngredientService {
 		}
 
 		ingredient.putIngredient(
-				postAndPutIngredientRequest.name(),
-				postAndPutIngredientRequest.description(),
-				postAndPutIngredientRequest.volume()
+				ingredientDto.name(),
+				ingredientDto.description(),
+				ingredientDto.volume()
 		);
 	}
 

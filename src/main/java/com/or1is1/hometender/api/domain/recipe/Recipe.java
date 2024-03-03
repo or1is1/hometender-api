@@ -29,15 +29,12 @@ public class Recipe {
 
 	private String manual;
 
-	private boolean isOfficial;
-
 	public Recipe(Member writer, String name, String description, CraftMethod craftMethod, String manual) {
 		this.writer = writer;
 		this.name = name;
 		this.description = description;
 		this.craftMethod = craftMethod;
 		this.manual = manual;
-		isOfficial = false;
 	}
 
 	public void put(String name, String description, CraftMethod craftMethod, String manual) {

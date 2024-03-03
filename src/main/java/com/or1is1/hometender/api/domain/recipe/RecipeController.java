@@ -1,8 +1,7 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.recipe.dto.PostAndPutRecipeRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeDetailResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +20,14 @@ public class RecipeController {
 	private final RecipeService recipeService;
 
 	@PostMapping
-	public CommonResponse<Void> postRecipe(@Validated @RequestBody PostAndPutRecipeRequest postAndPutRecipeRequest,
+	public CommonResponse<Void> postRecipe(@Validated @RequestBody RecipeDto recipeDto,
 	                                       @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		if (postAndPutRecipeRequest.recipeIngredientList() == null) {
+		if (recipeDto.recipeIngredientList() == null) {
 			throw new RecipeIngredientIsEmptyException();
 		}
 
-		recipeService.post(memberId, postAndPutRecipeRequest);
+		recipeService.post(memberId, recipeDto);
 
 		return new CommonResponse<>(null, null);
 	}
@@ -42,20 +41,20 @@ public class RecipeController {
 	}
 
 	@GetMapping("/{recipeId}")
-	public CommonResponse<GetRecipeDetailResponse> getRecipeDetail(@PathVariable Long recipeId,
-	                                                               @SessionAttribute(LOGIN_MEMBER) Long memberId) {
+	public CommonResponse<RecipeDto> getRecipeDetail(@PathVariable Long recipeId,
+	                                                 @SessionAttribute(LOGIN_MEMBER) Long memberId) {
 
-		GetRecipeDetailResponse getRecipeDetailResponse = recipeService.get(recipeId, memberId);
+		RecipeDto recipeDto = recipeService.get(recipeId, memberId);
 
-		return new CommonResponse<>(null, getRecipeDetailResponse);
+		return new CommonResponse<>(null, recipeDto);
 	}
 
 	@PutMapping("/{recipeId}")
 	public CommonResponse<Void> putRecipe(@PathVariable Long recipeId,
 	                                      @SessionAttribute(LOGIN_MEMBER) Long memberId,
-	                                      @Validated @RequestBody PostAndPutRecipeRequest postAndPutRecipeRequest) {
+	                                      @Validated @RequestBody RecipeDto recipeDto) {
 
-		recipeService.put(recipeId, memberId, postAndPutRecipeRequest);
+		recipeService.put(recipeId, memberId, recipeDto);
 
 		return new CommonResponse<>(null, null);
 	}
