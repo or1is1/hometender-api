@@ -1,5 +1,7 @@
 package com.or1is1.hometender.api.domain.recipe.dto;
 
+import com.or1is1.hometender.api.domain.ingredient.Ingredient;
+import com.or1is1.hometender.api.domain.recipe.Recipe;
 import com.or1is1.hometender.api.domain.recipe.RecipeIngredient;
 import com.or1is1.hometender.api.domain.recipe.SizeType;
 
@@ -9,7 +11,7 @@ public record RecipeIngredientDto(
 		float volume,
 		float size,
 		SizeType sizeType,
-		boolean isOptional
+		boolean isOption
 ) {
 	public RecipeIngredientDto(RecipeIngredient recipeIngredient) {
 		this(
@@ -20,5 +22,9 @@ public record RecipeIngredientDto(
 				recipeIngredient.getSizeType(),
 				recipeIngredient.isOption()
 		);
+	}
+
+	public RecipeIngredient toEntity(Recipe recipe) {
+		return new RecipeIngredient(recipe, new Ingredient(ingredientId), size, sizeType, isOption);
 	}
 }

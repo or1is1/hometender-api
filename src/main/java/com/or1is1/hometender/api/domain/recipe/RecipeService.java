@@ -1,12 +1,10 @@
 package com.or1is1.hometender.api.domain.recipe;
 
-import com.or1is1.hometender.api.domain.ingredient.Ingredient;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
+import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,20 +33,9 @@ public class RecipeService {
 
 		recipeRepository.save(recipe);
 
-		List<RecipeIngredientDto> recipeIngredientDtoList = postRequest.recipeIngredientList();
-
-		recipeIngredientDtoList.forEach(
-				recipeIngredientDto ->
-						recipeIngredientRepository.save(
-								new RecipeIngredient(
-										recipe,
-										new Ingredient(recipeIngredientDto.ingredientId()),
-										recipeIngredientDto.size(),
-										recipeIngredientDto.sizeType(),
-										recipeIngredientDto.isOptional()
-								)
-						)
-		);
+		postRequest.recipeIngredientList()
+				.forEach(recipeIngredientDto ->
+						recipeIngredientRepository.save(recipeIngredientDto.toEntity(recipe)));
 	}
 
 	public List<GetRecipeListResponse> getList(Long loginId) {
@@ -85,7 +72,11 @@ public class RecipeService {
 				recipeDto.manual()
 		);
 
-		List<RecipeIngredientDto> recipeIngredientDtoList = recipeDto.recipeIngredientList();
+		recipeIngredientRepository.deleteByRecipe(recipe);
+
+		recipeDto.recipeIngredientList()
+				.forEach(recipeIngredientDto ->
+						recipeIngredientRepository.save(recipeIngredientDto.toEntity(recipe)));
 	}
 
 	@Transactional
