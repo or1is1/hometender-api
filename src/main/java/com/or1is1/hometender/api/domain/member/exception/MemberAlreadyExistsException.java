@@ -1,14 +1,14 @@
 package com.or1is1.hometender.api.domain.member.exception;
 
-import com.or1is1.hometender.api.domain.member.dto.request.MemberExistsRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
 import lombok.Getter;
 
 @Getter
 public class MemberAlreadyExistsException extends RuntimeException {
-	private final MemberExistsRequest memberExistsRequest;
+	private final IsExistMemberRequest isExistMemberRequest;
 
-	public MemberAlreadyExistsException(MemberJoinRequest memberJoinRequest) {
-		this.memberExistsRequest = new MemberExistsRequest(memberJoinRequest);
+	public MemberAlreadyExistsException(PostMemberRequest postMemberRequest) {
+		this.isExistMemberRequest = new IsExistMemberRequest(postMemberRequest);
 	}
 }

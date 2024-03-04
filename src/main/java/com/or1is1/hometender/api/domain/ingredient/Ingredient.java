@@ -1,10 +1,7 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
 import com.or1is1.hometender.api.domain.member.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +18,7 @@ public class Ingredient {
 	private Long ingredientId;
 
 	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "member_id")
 	private Member writer;
 
 	@NotBlank
@@ -30,7 +28,11 @@ public class Ingredient {
 
 	private float volume; // 알콜 도수
 
-	Ingredient(Member writer, String name, String description, float volume) {
+	public Ingredient(Long ingredientId) {
+		this.ingredientId = ingredientId;
+	}
+
+	public Ingredient(Member writer, String name, String description, float volume) {
 		this.writer = writer;
 		this.name = name;
 		this.description = description;

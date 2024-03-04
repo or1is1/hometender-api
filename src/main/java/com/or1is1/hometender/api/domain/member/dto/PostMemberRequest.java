@@ -1,9 +1,9 @@
-package com.or1is1.hometender.api.domain.member.dto.request;
+package com.or1is1.hometender.api.domain.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record MemberJoinRequest(
+public record PostMemberRequest(
         @NotBlank(message = "{validation.constraints.NotBlank}")
         @Size(min = 5, max = 20, message = "{validation.constraints.Size.loginId}")
         String loginId,

@@ -1,12 +1,8 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberExistsRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.response.MemberIsExistsResponse;
+import com.or1is1.hometender.api.domain.member.dto.*;
+import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -23,7 +19,7 @@ public class MemberService {
 	private final MessageSource messageSource;
 
 	@Transactional
-	public void join(MemberJoinRequest userSignUpRequest) {
+	public void join(PostMemberRequest userSignUpRequest) {
 		String loginId = userSignUpRequest.loginId();
 		String password = passwordEncoder.encode(userSignUpRequest.password());
 		String nickname = userSignUpRequest.nickname();
@@ -31,9 +27,9 @@ public class MemberService {
 		memberRepository.save(new Member(loginId, password, nickname));
 	}
 
-	public MemberLoginResult login(MemberLoginRequest memberLoginRequest) {
-		String loginId = memberLoginRequest.loginId();
-		String password = memberLoginRequest.password();
+	public LoginMemberResult login(LoginMemberRequest loginMemberRequest) {
+		String loginId = loginMemberRequest.loginId();
+		String password = loginMemberRequest.password();
 		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findByLoginId(loginId)
@@ -43,16 +39,16 @@ public class MemberService {
 			throw memberCanNotFindException;
 		}
 
-		return new MemberLoginResult(member);
+		return new LoginMemberResult(member);
 	}
 
-	public MemberIsExistsResponse isExists(MemberExistsRequest memberExistsRequest) {
-		return memberRepository.isExists(memberExistsRequest.loginId(), memberExistsRequest.nickname());
+	public IsExistMemberResponse isExists(IsExistMemberRequest isExistMemberRequest) {
+		return memberRepository.isExists(isExistMemberRequest.loginId(), isExistMemberRequest.nickname());
 	}
 
 	@Transactional
-	public Void withdraw(String loginId, MemberWithdrawRequest memberWithdrawRequest) {
-		String password = memberWithdrawRequest.password();
+	public Void withdraw(String loginId, DeleteMemberRequest deleteMemberRequest) {
+		String password = deleteMemberRequest.password();
 		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findByLoginId(loginId)

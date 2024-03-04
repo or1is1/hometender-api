@@ -2,10 +2,7 @@ package com.or1is1.hometender.api.domain.ingredient;
 
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.StringConst;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPostRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPutRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.response.IngredientGetResponse;
-import jakarta.validation.constraints.NotBlank;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,51 +10,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ingredient")
+@RequestMapping("/api/ingredients")
 @RequiredArgsConstructor
 public class IngredientController {
 	private final IngredientService ingredientService;
 
 	@PostMapping
-	public CommonResponse<Void> postIngredient(@Validated @RequestBody IngredientPostRequest ingredientPostRequest,
+	public CommonResponse<Void> postIngredient(@Validated @RequestBody IngredientDto ingredientDto,
 	                                           @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
 
-		ingredientService.post(loginId, ingredientPostRequest);
+		ingredientService.post(loginId, ingredientDto);
 
 		return new CommonResponse<>(null, null);
 	}
 
 	@GetMapping
-	public CommonResponse<List<IngredientGetResponse>> getIngredientList(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
+	public CommonResponse<List<IngredientDto>> getIngredientList(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
 
-		List<IngredientGetResponse> ingredientGetResponseList = ingredientService.getList(loginId);
+		List<IngredientDto> ingredientDtoList = ingredientService.getList(loginId);
 
-		return new CommonResponse<>(null, ingredientGetResponseList);
+		return new CommonResponse<>(null, ingredientDtoList);
 	}
 
-	@GetMapping("/{name}")
-	public CommonResponse<IngredientGetResponse> getIngredient(@PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                                           @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
+	@GetMapping("/{ingredientId}")
+	public CommonResponse<IngredientDto> getIngredient(@PathVariable Long ingredientId,
+	                                                   @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
 
-		IngredientGetResponse ingredientGetResponse = ingredientService.get(name, loginId);
+		IngredientDto ingredientDto = ingredientService.get(ingredientId, loginId);
 
-		return new CommonResponse<>(null, ingredientGetResponse);
+		return new CommonResponse<>(null, ingredientDto);
 	}
 
-	@PutMapping("/{name}")
-	public CommonResponse<Void> patchIngredient(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId,
-	                                            @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name,
-	                                            @Validated @RequestBody IngredientPutRequest ingredientPutRequest) {
+	@PutMapping("/{ingredientId}")
+	public CommonResponse<Void> putIngredient(@PathVariable Long ingredientId,
+	                                          @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId,
+	                                          @Validated @RequestBody IngredientDto ingredientDto) {
 
-		ingredientService.put(name, loginId, ingredientPutRequest);
+		ingredientService.put(ingredientId, loginId, ingredientDto);
 
 		return new CommonResponse<>(null, null);
 	}
 
-	@DeleteMapping("/{name}")
-	public CommonResponse<Void> deleteIngredient(@SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId,
-	                                             @PathVariable @NotBlank(message = "{validation.constraints.NotBlank}") String name) {
-		ingredientService.delete(name, loginId);
+	@DeleteMapping("/{ingredientId}")
+	public CommonResponse<Void> deleteIngredient(@PathVariable Long ingredientId,
+	                                             @SessionAttribute(StringConst.LOGIN_MEMBER) Long loginId) {
+
+		ingredientService.delete(ingredientId, loginId);
 
 		return new CommonResponse<>(null, null);
 	}

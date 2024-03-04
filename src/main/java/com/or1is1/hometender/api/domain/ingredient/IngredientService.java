@@ -1,9 +1,8 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPutRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.request.IngredientPostRequest;
-import com.or1is1.hometender.api.domain.ingredient.dto.response.IngredientGetResponse;
+import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
+import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
 import com.or1is1.hometender.api.domain.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class IngredientService {
+
 	private final IngredientRepository ingredientRepository;
 
 	@Transactional
-	public void post(Long loginId, IngredientPostRequest addRequest) {
+	public void post(Long loginId, IngredientDto addRequest) {
+
 		Ingredient ingredient = new Ingredient(
 				new Member(loginId),
 				addRequest.name(),
@@ -30,33 +31,41 @@ public class IngredientService {
 		ingredientRepository.save(ingredient);
 	}
 
-	public IngredientGetResponse get(String name, Long loginId) {
-		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
-				.orElseThrow(IngredientCanNotFindException::new);
-
-		return new IngredientGetResponse(ingredient);
-	}
-
-	public List<IngredientGetResponse> getList(Long loginId) {
+	public List<IngredientDto> getList(Long loginId) {
 
 		return ingredientRepository.findByWriter(new Member(loginId))
-				.stream().map(IngredientGetResponse::new)
+				.stream().map(IngredientDto::new)
 				.toList();
 	}
 
-	@Transactional
-	public void put(String name, Long loginId, IngredientPutRequest ingredientPutRequest) {
-		Ingredient ingredient = ingredientRepository.findByWriterAndName(new Member(loginId), name)
+	public IngredientDto get(Long ingredientId, Long loginId) {
+
+		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
+		return new IngredientDto(ingredient);
+	}
+
+	@Transactional
+	public void put(Long ingredientId, Long loginId, IngredientDto ingredientDto) {
+
+		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
+				.orElseThrow(IngredientCanNotFindException::new);
+
+		if (!loginId.equals(ingredient.getWriter().getId())) {
+			throw new IngredientIsNotMineException();
+		}
+
 		ingredient.putIngredient(
-				name,
-				ingredientPutRequest.description(),
-				ingredientPutRequest.volume()
+				ingredientDto.name(),
+				ingredientDto.description(),
+				ingredientDto.volume()
 		);
 	}
 
-	public void delete(String name, Long loginId) {
-		ingredientRepository.deleteByWriterAndName(new Member(loginId), name);
+	@Transactional
+	public void delete(Long ingredientId, Long loginId) {
+
+		ingredientRepository.deleteByIngredientIdAndWriter(ingredientId, new Member(loginId));
 	}
 }

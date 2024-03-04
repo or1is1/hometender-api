@@ -2,10 +2,10 @@ package com.or1is1.hometender.api.domain.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.domain.member.dto.MemberLoginResult;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberJoinRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberLoginRequest;
-import com.or1is1.hometender.api.domain.member.dto.request.MemberWithdrawRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberResult;
+import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,14 +57,14 @@ class MemberControllerTest {
 	@DisplayName("회원가입")
 	void join() throws Exception {
 		// given
-		MemberJoinRequest memberJoinRequest = new MemberJoinRequest(loginId, password, nickname);
-		String content = objectMapper.writeValueAsString(memberJoinRequest);
+		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
+		String content = objectMapper.writeValueAsString(postMemberRequest);
 
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		MemberLoginResult memberLoginResult = new MemberLoginResult(1L, nickname);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		LoginMemberResult loginMemberResult = new LoginMemberResult(1L, nickname);
 
-		given(memberService.login(memberLoginRequest))
-				.willReturn(memberLoginResult);
+		given(memberService.login(loginMemberRequest))
+				.willReturn(loginMemberResult);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/join")
@@ -77,20 +77,20 @@ class MemberControllerTest {
 				jsonPath("$.data.nickname").value(nickname)
 		);
 
-		verify(memberService).join(memberJoinRequest);
+		verify(memberService).join(postMemberRequest);
 	}
 
 	@Test
 	@DisplayName("로그인")
 	void login() throws Exception {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		String content = objectMapper.writeValueAsString(loginMemberRequest);
 
-		MemberLoginResult memberLoginResult = new MemberLoginResult(1L, nickname);
+		LoginMemberResult loginMemberResult = new LoginMemberResult(1L, nickname);
 
-		given(memberService.login(memberLoginRequest))
-				.willReturn(memberLoginResult);
+		given(memberService.login(loginMemberRequest))
+				.willReturn(loginMemberResult);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -103,18 +103,18 @@ class MemberControllerTest {
 				jsonPath("$.data.nickname").value(nickname)
 		);
 
-		verify(memberService).login(memberLoginRequest);
+		verify(memberService).login(loginMemberRequest);
 	}
 
 	@Test
 	@DisplayName("로그인 실패 - 회원 정보 불일치")
 	void loginFail() throws Exception {
 		// given
-		MemberLoginRequest memberLoginRequest = new MemberLoginRequest(loginId, password);
-		String content = objectMapper.writeValueAsString(memberLoginRequest);
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		String content = objectMapper.writeValueAsString(loginMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		given(memberService.login(memberLoginRequest))
+		given(memberService.login(loginMemberRequest))
 				.willThrow(new MemberCanNotFindException());
 
 		// when
@@ -128,7 +128,7 @@ class MemberControllerTest {
 				jsonPath("$.message").value(message)
 		);
 
-		verify(memberService).login(memberLoginRequest);
+		verify(memberService).login(loginMemberRequest);
 	}
 
 	@Test
@@ -169,10 +169,10 @@ class MemberControllerTest {
 	@DisplayName("회원 탈퇴")
 	void withdraw() throws Exception {
 		// given
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
-		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
+		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 
-		doNothing().when(memberService).withdraw(loginId, memberWithdrawRequest);
+		doNothing().when(memberService).withdraw(loginId, deleteMemberRequest);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
@@ -184,18 +184,18 @@ class MemberControllerTest {
 				status().isOk()
 		);
 
-		verify(memberService).withdraw(loginId, memberWithdrawRequest);
+		verify(memberService).withdraw(loginId, deleteMemberRequest);
 	}
 
 	@Test
 	@DisplayName("회원 탈퇴 실패 - 회원 정보 불일치")
 	void withdrawFail() throws Exception {
 		// given
-		MemberWithdrawRequest memberWithdrawRequest = new MemberWithdrawRequest(password);
-		String content = objectMapper.writeValueAsString(memberWithdrawRequest);
+		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
+		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		given(memberService.withdraw(loginId, memberWithdrawRequest))
+		given(memberService.withdraw(loginId, deleteMemberRequest))
 				.willThrow(new MemberCanNotFindException());
 
 		// when
@@ -209,6 +209,6 @@ class MemberControllerTest {
 				jsonPath("$.message").value(message)
 		);
 
-		verify(memberService).withdraw(loginId, memberWithdrawRequest);
+		verify(memberService).withdraw(loginId, deleteMemberRequest);
 	}
 }
