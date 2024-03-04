@@ -5,6 +5,7 @@ import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMine
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
+import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +22,18 @@ public class RecipeService {
 	private final RecipeIngredientRepository recipeIngredientRepository;
 
 	@Transactional
-	public void post(Long loginId, RecipeDto postRequest) {
+	public void post(Long loginId, RecipeDto recipeDto) {
 
 		Recipe recipe = new Recipe(
 				new Member(loginId),
-				postRequest.name(),
-				postRequest.description(),
-				postRequest.craftMethod(),
-				postRequest.manual()
+				recipeDto.name(),
+				recipeDto.description(),
+				recipeDto.craftMethod(),
+				recipeDto.recipeIngredientList(),
+				recipeDto.manual()
 		);
 
 		recipeRepository.save(recipe);
-
-		postRequest.recipeIngredientList()
-				.forEach(recipeIngredientDto ->
-						recipeIngredientRepository.save(recipeIngredientDto.toEntity(recipe)));
 	}
 
 	public List<GetRecipeListResponse> getList(Long loginId) {
@@ -50,7 +48,7 @@ public class RecipeService {
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findByRecipe(recipe);
+		List<RecipeIngredient> recipeIngredientList = recipe.getRecipeIngredientList();
 
 		return new RecipeDto(recipe, recipeIngredientList);
 	}
@@ -59,29 +57,25 @@ public class RecipeService {
 	public void put(Long recipeId, Long loginId, RecipeDto recipeDto) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
-				.orElseThrow(IngredientCanNotFindException::new);
+				.orElseThrow(RecipeIsNotMineException::new);
 
 		if (!loginId.equals(recipe.getWriter().getId())) {
 			throw new IngredientIsNotMineException();
 		}
 
+		recipeIngredientRepository.deleteByRecipe(recipe);
+
 		recipe.put(
 				recipeDto.name(),
 				recipeDto.description(),
 				recipeDto.craftMethod(),
+				recipeDto.recipeIngredientList(),
 				recipeDto.manual()
 		);
-
-		recipeIngredientRepository.deleteByRecipe(recipe);
-
-		recipeDto.recipeIngredientList()
-				.forEach(recipeIngredientDto ->
-						recipeIngredientRepository.save(recipeIngredientDto.toEntity(recipe)));
 	}
 
 	@Transactional
 	public void delete(Long recipeId, Long loginId) {
-
 		recipeRepository.deleteByRecipeIdAndWriter(recipeId, new Member(loginId));
 	}
 }

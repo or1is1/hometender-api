@@ -8,7 +8,6 @@ public record IngredientDto(
 		String name,
 		@NotBlank(message = "{validation.constraints.NotBlank}")
 		String description,
-		@NotBlank(message = "{validation.constraints.NotBlank}")
 		float volume
 ) {
 	public IngredientDto(Ingredient ingredient) {

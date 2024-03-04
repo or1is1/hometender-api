@@ -18,9 +18,11 @@ public class RecipeIngredient {
 	private Long RecipeIngredientId;
 
 	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "recipe_id")
 	private Recipe recipe;
 
 	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "ingredient_id")
 	private Ingredient ingredient;
 
 	private float size;
