@@ -1,6 +1,7 @@
 package com.or1is1.hometender.api.domain.ingredient.dto;
 
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
+import com.or1is1.hometender.api.domain.shelf.Shelf;
 import jakarta.validation.constraints.NotBlank;
 
 public record IngredientDto(
@@ -15,6 +16,14 @@ public record IngredientDto(
 				ingredient.getName(),
 				ingredient.getDescription(),
 				ingredient.getVolume()
+		);
+	}
+
+	public IngredientDto(Shelf shelf) {
+		this(
+				shelf.getIngredient().getName(),
+				shelf.getIngredient().getDescription(),
+				shelf.getIngredient().getVolume()
 		);
 	}
 }

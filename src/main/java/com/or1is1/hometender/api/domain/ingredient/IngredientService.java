@@ -56,7 +56,7 @@ public class IngredientService {
 			throw new IngredientIsNotMineException();
 		}
 
-		ingredient.putIngredient(
+		ingredient.put(
 				ingredientDto.name(),
 				ingredientDto.description(),
 				ingredientDto.volume()

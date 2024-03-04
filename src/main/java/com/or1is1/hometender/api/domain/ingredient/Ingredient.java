@@ -34,12 +34,10 @@ public class Ingredient {
 
 	public Ingredient(Member writer, String name, String description, float volume) {
 		this.writer = writer;
-		this.name = name;
-		this.description = description;
-		this.volume = volume;
+		put(name, description, volume);
 	}
 
-	public void putIngredient(String name, String description, float volume) {
+	public void put(String name, String description, float volume) {
 		this.name = name;
 		this.description = description;
 		this.volume = volume;

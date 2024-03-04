@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/ingredients")
 @RequiredArgsConstructor
 public class IngredientController {
+
 	private final IngredientService ingredientService;
 
 	@PostMapping
