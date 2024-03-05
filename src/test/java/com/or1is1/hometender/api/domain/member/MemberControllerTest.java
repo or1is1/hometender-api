@@ -67,7 +67,7 @@ class MemberControllerTest {
 				.willReturn(loginMemberResult);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(post(url + "/join")
+		ResultActions resultActions = mockMvc.perform(post(url)
 				.contentType(APPLICATION_JSON)
 				.content(content));
 
@@ -77,7 +77,7 @@ class MemberControllerTest {
 				jsonPath("$.data.nickname").value(nickname)
 		);
 
-		verify(memberService).join(postMemberRequest);
+		verify(memberService).post(postMemberRequest);
 	}
 
 	@Test
@@ -135,9 +135,8 @@ class MemberControllerTest {
 	@DisplayName("로그아웃")
 	void logout() throws Exception {
 		// given
-		Member member = new Member(loginId, password, nickname);
 		MockHttpSession mockHttpSession = new MockHttpSession();
-		mockHttpSession.setAttribute(LOGIN_MEMBER, member);
+		mockHttpSession.setAttribute(LOGIN_MEMBER, 1L);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/logout")
@@ -146,22 +145,7 @@ class MemberControllerTest {
 
 		// then
 		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data").value(true)
-		);
-	}
-
-	@Test
-	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
-	void logoutFail() throws Exception {
-		// when
-		ResultActions resultActions = mockMvc.perform(post(url + "/logout")
-				.contentType(APPLICATION_JSON));
-
-		// then
-		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data").value(false)
+				status().isOk()
 		);
 	}
 
@@ -169,39 +153,48 @@ class MemberControllerTest {
 	@DisplayName("회원 탈퇴")
 	void withdraw() throws Exception {
 		// given
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute(LOGIN_MEMBER, 1L);
+
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 
-		doNothing().when(memberService).withdraw(loginId, deleteMemberRequest);
+		doNothing().when(memberService)
+				.delete(1L, deleteMemberRequest);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
+		ResultActions resultActions = mockMvc.perform(delete(url)
 				.contentType(APPLICATION_JSON)
-				.content(content));
+				.content(content)
+				.session(mockHttpSession));
 
 		// then
 		resultActions.andExpectAll(
 				status().isOk()
 		);
 
-		verify(memberService).withdraw(loginId, deleteMemberRequest);
+		verify(memberService).delete(1L, deleteMemberRequest);
 	}
 
 	@Test
 	@DisplayName("회원 탈퇴 실패 - 회원 정보 불일치")
 	void withdrawFail() throws Exception {
 		// given
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute(LOGIN_MEMBER, 1L);
+
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
-		given(memberService.withdraw(loginId, deleteMemberRequest))
+		given(memberService.delete(1L, deleteMemberRequest))
 				.willThrow(new MemberCanNotFindException());
 
 		// when
-		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
+		ResultActions resultActions = mockMvc.perform(delete(url)
 				.contentType(APPLICATION_JSON)
-				.content(content));
+				.content(content)
+				.session(mockHttpSession));
 
 		// then
 		resultActions.andExpectAll(
@@ -209,6 +202,6 @@ class MemberControllerTest {
 				jsonPath("$.message").value(message)
 		);
 
-		verify(memberService).withdraw(loginId, deleteMemberRequest);
+		verify(memberService).delete(1L, deleteMemberRequest);
 	}
 }

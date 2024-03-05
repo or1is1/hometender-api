@@ -32,6 +32,10 @@ public class Member {
 
     public Member(String loginId, String password, String nickname) {
         this.loginId = loginId;
+        put(password, nickname);
+    }
+
+    public void put(String password, String nickname) {
         this.password = password;
         this.nickname = nickname;
     }

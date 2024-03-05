@@ -18,11 +18,11 @@ Thymeleaf 등의 템플릿 엔진을 통합하여 단일 프로젝트로 개발�
 
 ## 📅 프로젝트 기간
 
-2024년 2월 1일 ~ ***ing***
+MVP : 2024년 2월 1일 ~ 3월 5일
 
 ## 📄 RESTful API
 
-![image](https://github.com/or1is1/hometender-api/assets/16082602/912385bf-2b53-43a4-8435-ee59eeb3491f)
+![image](https://github.com/or1is1/hometender-api/assets/16082602/9072491c-c55c-4b19-b88d-efd37d83f01f)
 
 ## ⚙️ 개발환경
 

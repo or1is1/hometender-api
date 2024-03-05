@@ -71,7 +71,7 @@ class MemberIntegrationTest {
 		String content = objectMapper.writeValueAsString(postMemberRequest);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(post(url + "/join")
+		ResultActions resultActions = mockMvc.perform(post(url)
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
 				.content(content));
@@ -109,7 +109,9 @@ class MemberIntegrationTest {
 	@DisplayName("로그인 실패 - 회원 정보 불일치")
 	void loginFail() throws Exception {
 		// given
-		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
+		join();
+
+		LoginMemberRequest loginMemberRequest = new LoginMemberRequest("loginId2", password);
 		String content = objectMapper.writeValueAsString(loginMemberRequest);
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
@@ -129,6 +131,8 @@ class MemberIntegrationTest {
 	@DisplayName("로그아웃")
 	void logout() throws Exception {
 		// given
+		join();
+
 		Member member = new Member(loginId, password, nickname);
 		MockHttpSession mockHttpSession = new MockHttpSession();
 		mockHttpSession.setAttribute(LOGIN_MEMBER, member);
@@ -140,8 +144,7 @@ class MemberIntegrationTest {
 
 		// then
 		resultActions.andExpectAll(
-				status().isOk(),
-				jsonPath("$.data").value(true)
+				status().isOk()
 		);
 	}
 
@@ -149,6 +152,7 @@ class MemberIntegrationTest {
 	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
 		// given
+
 		String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
 
 		// when
@@ -172,7 +176,7 @@ class MemberIntegrationTest {
 		String content = objectMapper.writeValueAsString(deleteMemberRequest);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
+		ResultActions resultActions = mockMvc.perform(delete(url)
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
 				.content(content));
@@ -195,7 +199,7 @@ class MemberIntegrationTest {
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(delete(url + "/" + loginId)
+		ResultActions resultActions = mockMvc.perform(delete(url)
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
 				.content(content));

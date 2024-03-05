@@ -25,7 +25,8 @@ import java.util.List;
 import static com.or1is1.hometender.api.domain.recipe.CraftMethod.BUILD;
 import static com.or1is1.hometender.api.domain.recipe.SizeType.OZ;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,8 +35,8 @@ class RecipeIntegrationTest {
 	private final String loginId;
 	private final String password;
 	private final String nickname;
-	private final String url;
-	private final String joinUrl;
+	private final String recipeUrl;
+	private final String memberUrl;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -54,8 +55,8 @@ class RecipeIntegrationTest {
 		loginId = "loginId";
 		password = "password";
 		nickname = "nickname";
-		url = "/api/recipe";
-		joinUrl = "/api/members/join";
+		recipeUrl = "/api/recipe";
+		memberUrl = "/api/members";
 	}
 
 	@BeforeEach
@@ -73,16 +74,17 @@ class RecipeIntegrationTest {
 	void postRecipe() throws Exception {
 		// given
 		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
-		String contentOfJOin = objectMapper.writeValueAsString(postMemberRequest);
+		String content = objectMapper.writeValueAsString(postMemberRequest);
+
 
 		// 회원가입 & 로그인
-		mockMvc.perform(post(joinUrl)
+		mockMvc.perform(post(memberUrl)
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
-				.content(contentOfJOin));
+				.content(content));
 
 		IngredientDto ingredient1 = new IngredientDto("스카치 위스키", "스코틀랜드의 위스키이다.", 40L);
-		String content = objectMapper.writeValueAsString(ingredient1);
+		content = objectMapper.writeValueAsString(ingredient1);
 
 		// 재료 추가 1
 		mockMvc.perform(post("/api/ingredients")
@@ -110,7 +112,7 @@ class RecipeIntegrationTest {
 		content = objectMapper.writeValueAsString(rustyNail);
 
 		// 레시피 추가
-		mockMvc.perform(post(url)
+		mockMvc.perform(post(recipeUrl)
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
 				.content(content));
@@ -134,7 +136,7 @@ class RecipeIntegrationTest {
 		content = objectMapper.writeValueAsString(godFather);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(put(url + "/1")
+		ResultActions resultActions = mockMvc.perform(put(recipeUrl + "/1")
 				.contentType(APPLICATION_JSON)
 				.session(mockHttpSession)
 				.content(content));

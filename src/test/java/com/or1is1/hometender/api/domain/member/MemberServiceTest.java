@@ -50,7 +50,7 @@ class MemberServiceTest {
 		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
 
 		// when
-		memberService.join(postMemberRequest);
+		memberService.post(postMemberRequest);
 
 		// then
 		verify(memberRepository).save(any(Member.class));
@@ -66,7 +66,7 @@ class MemberServiceTest {
 				.willThrow(MemberAlreadyExistsException.class);
 
 		// when then
-		assertThatThrownBy(() -> memberService.join(postMemberRequest))
+		assertThatThrownBy(() -> memberService.post(postMemberRequest))
 				.isInstanceOf(MemberAlreadyExistsException.class);
 	}
 
@@ -79,6 +79,7 @@ class MemberServiceTest {
 
 		given(memberRepository.findByLoginId(loginId))
 				.willReturn(of(member));
+
 		given(mockPasswordEncoder.matches(password, password))
 				.willReturn(true);
 
@@ -125,16 +126,17 @@ class MemberServiceTest {
 	void withdraw() {
 		// given
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
-		Member member = new Member(loginId, password, nickname);
+		Member member = new Member(1L);
+		member.put(password, nickname);
 
-		given(memberRepository.findByLoginId(loginId))
+		given(memberRepository.findById(1L))
 				.willReturn(of(member));
 
 		given(mockPasswordEncoder.matches(password, password))
 				.willReturn(true);
 
 		// when
-		memberService.withdraw(loginId, deleteMemberRequest);
+		memberService.delete(1L, deleteMemberRequest);
 
 		// then
 		verify(memberRepository).delete(member);
@@ -147,11 +149,11 @@ class MemberServiceTest {
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		Member member = new Member(loginId, password, nickname);
 
-		given(memberRepository.findByLoginId(loginId))
+		given(memberRepository.findById(1L))
 				.willReturn(of(member));
 
 		// when then
-		assertThatThrownBy(() -> memberService.withdraw(loginId, deleteMemberRequest))
+		assertThatThrownBy(() -> memberService.delete(1L, deleteMemberRequest))
 				.isExactlyInstanceOf(MemberCanNotFindException.class);
 	}
 }

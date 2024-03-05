@@ -4,6 +4,7 @@ import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.member.dto.IsExistMemberResponse;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
+import com.or1is1.hometender.api.domain.member.exception.MemberNeedToLoginException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,20 +18,34 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice(basePackages = "com.or1is1.hometender.api.domain.member")
 @RequiredArgsConstructor(access = PROTECTED)
 public class MemberExceptionHandler {
+
 	private final MemberService memberService;
 	private final MessageSource messageSource;
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
+	public CommonResponse<Void> memberNeedLoginException(MemberNeedToLoginException ex) {
+
+		String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
+
+		return new CommonResponse<>(message, null);
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(BAD_REQUEST)
 	public CommonResponse<IsExistMemberResponse> memberAlreadyExistsException(MemberAlreadyExistsException ex) {
+
 		String message = messageSource.getMessage("member.exception.alreadyExists", null, KOREAN);
+
 		return new CommonResponse<>(message, memberService.isExists(ex.getIsExistMemberRequest()));
 	}
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
 	public CommonResponse<Void> memberCanNotFindException(MemberCanNotFindException ex) {
+
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+
 		return new CommonResponse<>(message, null);
 	}
 }

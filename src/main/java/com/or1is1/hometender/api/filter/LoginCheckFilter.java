@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class LoginCheckFilter implements Filter {
 	private static final String[] whitelist = {
-			"/api/members/join",
+			"/api/members",
 			"/api/members/login",
 			"/swagger-ui/*",
 			"/v3/api-docs/hometender-api",
