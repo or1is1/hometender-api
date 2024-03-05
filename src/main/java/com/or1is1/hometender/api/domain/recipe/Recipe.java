@@ -37,6 +37,10 @@ public class Recipe {
 
 	private String manual;
 
+	public Recipe(Long recipeId) {
+		this.recipeId = recipeId;
+	}
+
 	public Recipe(Member writer, String name, String description, CraftMethod craftMethod,
 	              List<RecipeIngredientDto> recipeIngredientList, String manual) {
 
