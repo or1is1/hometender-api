@@ -3,9 +3,7 @@ package com.or1is1.hometender.api.domain.recipe.dto;
 import com.or1is1.hometender.api.domain.bookmark.Bookmark;
 import com.or1is1.hometender.api.domain.recipe.CraftMethod;
 import com.or1is1.hometender.api.domain.recipe.Recipe;
-import com.or1is1.hometender.api.domain.recipe.RecipeIngredient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public record RecipeDto(
@@ -15,17 +13,20 @@ public record RecipeDto(
 		List<RecipeIngredientDto> recipeIngredientList,
 		String manual
 ) {
-	public RecipeDto(Recipe recipe, List<RecipeIngredient> recipeIngredientList) {
+	public RecipeDto(Recipe recipe) {
 		this(
 				recipe.getName(),
 				recipe.getDescription(),
 				recipe.getCraftMethod(),
-				recipeIngredientList.stream().map(RecipeIngredientDto::new).toList(),
+				recipe.getRecipeIngredientList()
+						.stream()
+						.map(RecipeIngredientDto::new)
+						.toList(),
 				recipe.getManual()
 		);
 	}
 
 	public RecipeDto(Bookmark bookmark) {
-		this(bookmark.getRecipe(), new ArrayList<>());
+		this(bookmark.getRecipe());
 	}
 }

@@ -1,10 +1,10 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
+import com.or1is1.hometender.api.domain.recipe.exception.RecipeCanNotFindException;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
@@ -48,19 +48,17 @@ public class RecipeService {
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
 				.orElseThrow(IngredientCanNotFindException::new);
 
-		List<RecipeIngredient> recipeIngredientList = recipe.getRecipeIngredientList();
-
-		return new RecipeDto(recipe, recipeIngredientList);
+		return new RecipeDto(recipe);
 	}
 
 	@Transactional
 	public void put(Long recipeId, Long loginId, RecipeDto recipeDto) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
-				.orElseThrow(RecipeIsNotMineException::new);
+				.orElseThrow(RecipeCanNotFindException::new);
 
 		if (!loginId.equals(recipe.getWriter().getId())) {
-			throw new IngredientIsNotMineException();
+			throw new RecipeIsNotMineException();
 		}
 
 		recipeIngredientRepository.deleteByRecipe(recipe);

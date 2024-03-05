@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.CommonResponse;
-import com.or1is1.hometender.api.domain.member.MemberService;
+import com.or1is1.hometender.api.domain.recipe.exception.RecipeCanNotFindException;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException;
 import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,19 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice(basePackages = "com.or1is1.hometender.api.domain.recipe")
 @RequiredArgsConstructor(access = PROTECTED)
 public class RecipeExceptionHandler {
-	private final MemberService memberService;
+
 	private final MessageSource messageSource;
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
-	public CommonResponse<Void> memberAlreadyExistsException(RecipeIsNotMineException ex) {
+	public CommonResponse<Void> recipeCanNotFindException(RecipeCanNotFindException ex) {
+		String message = messageSource.getMessage("recipe.exception.cantNotFind", null, KOREAN);
+		return new CommonResponse<>(message, null);
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(BAD_REQUEST)
+	public CommonResponse<Void> recipeIsNotMineException(RecipeIsNotMineException ex) {
 		String message = messageSource.getMessage("recipe.exception.isNotMine", null, KOREAN);
 		return new CommonResponse<>(message, null);
 	}
