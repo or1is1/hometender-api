@@ -20,6 +20,14 @@ public class MemberController {
 
 	private final MemberService memberService;
 
+	@GetMapping
+	public CommonResponse<LoginMemberResult> get(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId) {
+
+		LoginMemberResult loginMemberResult = memberService.get(memberId);
+
+		return new CommonResponse<>("", loginMemberResult);
+	}
+
 	@PostMapping
 	public CommonResponse<LoginMemberResponse> post(@Validated @RequestBody PostMemberRequest postMemberRequest,
 	                                                HttpServletRequest httpServletRequest) {

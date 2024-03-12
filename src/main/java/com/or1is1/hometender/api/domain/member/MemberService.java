@@ -4,7 +4,6 @@ import com.or1is1.hometender.api.domain.member.dto.*;
 import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final MessageSource messageSource;
+
+	public LoginMemberResult get(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+				.orElseThrow(MemberCanNotFindException::new);
+
+		return new LoginMemberResult(member);
+	}
 
 	@Transactional
 	public void post(PostMemberRequest userSignUpRequest) {
