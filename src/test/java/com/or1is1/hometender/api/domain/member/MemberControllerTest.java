@@ -2,11 +2,10 @@ package com.or1is1.hometender.api.domain.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
 import com.or1is1.hometender.api.domain.member.dto.LoginMemberResult;
 import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
-import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
+import static com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException.MEMBER_CAN_NOT_FIND_EXCEPTION;
 import static java.util.Locale.KOREAN;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -115,7 +115,7 @@ class MemberControllerTest {
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		given(memberService.login(loginMemberRequest))
-				.willThrow(new MemberCanNotFindException());
+				.willThrow(MEMBER_CAN_NOT_FIND_EXCEPTION);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -188,7 +188,7 @@ class MemberControllerTest {
 		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
 
 		given(memberService.delete(1L, deleteMemberRequest))
-				.willThrow(new MemberCanNotFindException());
+				.willThrow(MEMBER_CAN_NOT_FIND_EXCEPTION);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url)

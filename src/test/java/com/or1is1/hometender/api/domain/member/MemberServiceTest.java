@@ -101,7 +101,7 @@ class MemberServiceTest {
 
 		// when then
 		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
-				.isInstanceOf(MemberCanNotFindException.class);
+				.isExactlyInstanceOf(MemberCanNotFindException.class);
 	}
 
 	@Test
@@ -118,7 +118,7 @@ class MemberServiceTest {
 
 		// when then
 		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
-				.isInstanceOf(MemberCanNotFindException.class);
+				.isExactlyInstanceOf(MemberCanNotFindException.class);
 	}
 
 	@Test

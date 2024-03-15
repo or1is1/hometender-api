@@ -1,23 +1,25 @@
 package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.domain.member.dto.*;
-import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException.MEMBER_CAN_NOT_FIND_EXCEPTION;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
+
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
 	public LoginMemberResult get(Long memberId) {
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(MemberCanNotFindException::new);
+				.orElseThrow(() -> MEMBER_CAN_NOT_FIND_EXCEPTION);
 
 		return new LoginMemberResult(member);
 	}
@@ -38,13 +40,12 @@ public class MemberService {
 	@Transactional
 	public Void delete(Long memberId, DeleteMemberRequest deleteMemberRequest) {
 		String password = deleteMemberRequest.password();
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> memberCanNotFindException);
+				.orElseThrow(() -> MEMBER_CAN_NOT_FIND_EXCEPTION);
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw memberCanNotFindException;
+			throw MEMBER_CAN_NOT_FIND_EXCEPTION;
 		}
 
 		memberRepository.delete(member);
@@ -55,13 +56,12 @@ public class MemberService {
 	public LoginMemberResult login(LoginMemberRequest loginMemberRequest) {
 		String loginId = loginMemberRequest.loginId();
 		String password = loginMemberRequest.password();
-		MemberCanNotFindException memberCanNotFindException = new MemberCanNotFindException();
 
 		Member member = memberRepository.findByLoginId(loginId)
-				.orElseThrow(() -> memberCanNotFindException);
+				.orElseThrow(() -> MEMBER_CAN_NOT_FIND_EXCEPTION);
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw memberCanNotFindException;
+			throw MEMBER_CAN_NOT_FIND_EXCEPTION;
 		}
 
 		return new LoginMemberResult(member);

@@ -3,7 +3,6 @@ package com.or1is1.hometender.api.domain.member;
 import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.member.dto.*;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
-import com.or1is1.hometender.api.domain.member.exception.MemberNeedToLoginException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
+import static com.or1is1.hometender.api.domain.member.exception.MemberNeedToLoginException.MEMBER_NEED_TO_LOGIN_EXCEPTION;
 
 @RestController
 @RequestMapping("/api/members")
@@ -48,7 +48,7 @@ public class MemberController {
 	                                   @Validated @RequestBody DeleteMemberRequest deleteMemberRequest) {
 
 		if (memberId == null) {
-			throw new MemberNeedToLoginException();
+			throw MEMBER_NEED_TO_LOGIN_EXCEPTION;
 		}
 
 		memberService.delete(memberId, deleteMemberRequest);
