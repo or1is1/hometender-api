@@ -1,11 +1,8 @@
 package com.or1is1.hometender.api.domain.recipe;
 
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
-import com.or1is1.hometender.api.domain.recipe.exception.RecipeCanNotFindException;
-import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException.INGREDIENT_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.domain.recipe.exception.RecipeCanNotFindException.RECIPE_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException.RECIPE_IS_NOT_MINE_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class RecipeService {
 	public RecipeDto get(Long recipeId, Long loginId) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
-				.orElseThrow(IngredientCanNotFindException::new);
+				.orElseThrow(() -> INGREDIENT_CAN_NOT_FIND_EXCEPTION);
 
 		return new RecipeDto(recipe);
 	}
@@ -55,10 +56,10 @@ public class RecipeService {
 	public void put(Long recipeId, Long loginId, RecipeDto recipeDto) {
 
 		Recipe recipe = recipeRepository.findByRecipeIdAndWriter(recipeId, new Member(loginId))
-				.orElseThrow(RecipeCanNotFindException::new);
+				.orElseThrow(() -> RECIPE_CAN_NOT_FIND_EXCEPTION);
 
 		if (!loginId.equals(recipe.getWriter().getId())) {
-			throw new RecipeIsNotMineException();
+			throw RECIPE_IS_NOT_MINE_EXCEPTION;
 		}
 
 		recipeIngredientRepository.deleteByRecipe(recipe);

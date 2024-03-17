@@ -1,7 +1,6 @@
 package com.or1is1.hometender.api.domain.member;
 
 import com.or1is1.hometender.api.domain.member.dto.*;
-import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
+import static com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException.MEMBER_ALREADY_EXISTS_EXCEPTION;
 import static com.or1is1.hometender.api.domain.member.exception.MemberNeedToLoginException.MEMBER_NEED_TO_LOGIN_EXCEPTION;
 
 @RestController
@@ -40,7 +40,7 @@ public class MemberController {
 
 			return login(loginMemberRequest, httpServletRequest);
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberAlreadyExistsException();
+			throw MEMBER_ALREADY_EXISTS_EXCEPTION;
 		}
 	}
 

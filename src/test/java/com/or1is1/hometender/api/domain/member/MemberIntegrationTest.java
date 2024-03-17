@@ -152,7 +152,6 @@ class MemberIntegrationTest {
 	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
 		// given
-
 		String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
 
 		// when

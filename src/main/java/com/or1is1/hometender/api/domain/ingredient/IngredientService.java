@@ -1,8 +1,6 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
 import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
 import com.or1is1.hometender.api.domain.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException.INGREDIENT_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException.INGREDIENT_IS_NOT_MINE_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class IngredientService {
 	public IngredientDto get(Long ingredientId, Long loginId) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
-				.orElseThrow(IngredientCanNotFindException::new);
+				.orElseThrow(() -> INGREDIENT_CAN_NOT_FIND_EXCEPTION);
 
 		return new IngredientDto(ingredient);
 	}
@@ -50,10 +51,10 @@ public class IngredientService {
 	public void put(Long ingredientId, Long loginId, IngredientDto ingredientDto) {
 
 		Ingredient ingredient = ingredientRepository.findByIngredientIdAndWriter(ingredientId, new Member(loginId))
-				.orElseThrow(IngredientCanNotFindException::new);
+				.orElseThrow(() -> INGREDIENT_CAN_NOT_FIND_EXCEPTION);
 
 		if (!loginId.equals(ingredient.getWriter().getId())) {
-			throw new IngredientIsNotMineException();
+			throw INGREDIENT_IS_NOT_MINE_EXCEPTION;
 		}
 
 		ingredient.put(

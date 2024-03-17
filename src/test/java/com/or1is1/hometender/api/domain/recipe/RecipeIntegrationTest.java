@@ -18,6 +18,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ class RecipeIntegrationTest {
 
 	@Test
 	@DisplayName("레시피 수정")
+	@Transactional
 	void postRecipe() throws Exception {
 		// given
 		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
