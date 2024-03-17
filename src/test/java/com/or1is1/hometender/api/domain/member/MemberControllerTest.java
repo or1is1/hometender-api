@@ -74,7 +74,7 @@ class MemberControllerTest {
 		//then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.nickname").value(nickname)
+				jsonPath("$.nickname").value(nickname)
 		);
 
 		verify(memberService).post(postMemberRequest);
@@ -100,7 +100,7 @@ class MemberControllerTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.nickname").value(nickname)
+				jsonPath("$.nickname").value(nickname)
 		);
 
 		verify(memberService).login(loginMemberRequest);

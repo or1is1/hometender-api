@@ -23,16 +23,16 @@ public class ControllerAdvice {
 
 	@ExceptionHandler
 	@ResponseStatus(BAD_REQUEST)
-	public CommonResponse<List<String>> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
+	public List<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
 		BindingResult bindingResult = ex.getBindingResult();
 
 		if (bindingResult.hasErrors()) {
 			log.warn(ex.getMessage(), ex);
 
-			return new CommonResponse<>(null, bindingResult.getAllErrors()
+			return bindingResult.getAllErrors()
 					.stream()
 					.map(DefaultMessageSourceResolvable::getDefaultMessage)
-					.toList());
+					.toList();
 		}
 
 		String message = messageSource.getMessage("exception", null, KOREAN);

@@ -79,7 +79,7 @@ class MemberIntegrationTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.nickname").value(nickname)
+				jsonPath("$.nickname").value(nickname)
 		);
 	}
 
@@ -101,7 +101,7 @@ class MemberIntegrationTest {
 		// then
 		resultActions.andExpectAll(
 				status().isOk(),
-				jsonPath("$.data.nickname").value(nickname)
+				jsonPath("$.nickname").value(nickname)
 		);
 	}
 

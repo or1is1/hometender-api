@@ -1,6 +1,5 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.CommonResponse;
 import com.or1is1.hometender.api.domain.member.dto.*;
 import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,20 +20,18 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@GetMapping
-	public CommonResponse<LoginMemberResult> get(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId) {
+	public LoginMemberResult get(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId) {
 
 		if (memberId == null) {
 			throw MEMBER_NEED_TO_LOGIN_EXCEPTION;
 		}
 
-		LoginMemberResult loginMemberResult = memberService.get(memberId);
-
-		return new CommonResponse<>("", loginMemberResult);
+		return memberService.get(memberId);
 	}
 
 	@PostMapping
-	public CommonResponse<LoginMemberResponse> post(@Validated @RequestBody PostMemberRequest postMemberRequest,
-	                                                HttpServletRequest httpServletRequest) {
+	public LoginMemberResponse post(@Validated @RequestBody PostMemberRequest postMemberRequest,
+	                                HttpServletRequest httpServletRequest) {
 
 		try {
 			memberService.post(postMemberRequest);
@@ -43,41 +40,35 @@ public class MemberController {
 
 			return login(loginMemberRequest, httpServletRequest);
 		} catch (DataIntegrityViolationException ex) {
-			throw new MemberAlreadyExistsException(postMemberRequest);
+			throw new MemberAlreadyExistsException();
 		}
 	}
 
 	@DeleteMapping
-	public CommonResponse<Void> delete(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId,
-	                                   @Validated @RequestBody DeleteMemberRequest deleteMemberRequest) {
+	public void delete(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId,
+	                   @Validated @RequestBody DeleteMemberRequest deleteMemberRequest) {
 
 		if (memberId == null) {
 			throw MEMBER_NEED_TO_LOGIN_EXCEPTION;
 		}
 
 		memberService.delete(memberId, deleteMemberRequest);
-
-		return new CommonResponse<>("", null);
 	}
 
 	@PostMapping("/login")
-	public CommonResponse<LoginMemberResponse> login(@Validated @RequestBody LoginMemberRequest loginMemberRequest,
-	                                                 HttpServletRequest httpServletRequest) {
+	public LoginMemberResponse login(@Validated @RequestBody LoginMemberRequest loginMemberRequest,
+	                                 HttpServletRequest httpServletRequest) {
 
 		LoginMemberResult loginMemberResult = memberService.login(loginMemberRequest);
 
 		httpServletRequest.getSession().setAttribute(LOGIN_MEMBER, loginMemberResult.id());
 
-		LoginMemberResponse loginMemberResponse = new LoginMemberResponse(loginMemberResult);
-
-		return new CommonResponse<>(null, loginMemberResponse);
+		return new LoginMemberResponse(loginMemberResult);
 	}
 
 	@PostMapping("/logout")
-	public CommonResponse<Void> logout(HttpServletRequest httpServletRequest) {
+	public void logout(HttpServletRequest httpServletRequest) {
 
 		httpServletRequest.getSession().invalidate();
-
-		return new CommonResponse<>(null, null);
 	}
 }

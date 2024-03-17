@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.CommonResponse;
+import com.or1is1.hometender.api.ErrorResponse;
 import com.or1is1.hometender.api.StringConst;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +14,7 @@ import org.springframework.util.PatternMatchUtils;
 
 import java.io.IOException;
 
+import static com.or1is1.hometender.api.ErrorCode.MEMBER_NOT_AUTHENTICATED;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Locale.KOREAN;
@@ -48,8 +49,8 @@ public class LoginCheckFilter implements Filter {
 
 			log.info("{} | requestUri = {} | sessionIsNull = {}", message, requestURI, session == null);
 
-			CommonResponse<Void> objectCommonResponse = new CommonResponse<>(message, null);
-			String content = objectMapper.writeValueAsString(objectCommonResponse);
+			ErrorResponse objectErrorResponse = new ErrorResponse(MEMBER_NOT_AUTHENTICATED, message);
+			String content = objectMapper.writeValueAsString(objectErrorResponse);
 
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 			httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
