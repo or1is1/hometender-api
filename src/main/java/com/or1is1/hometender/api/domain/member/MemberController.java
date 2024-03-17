@@ -23,6 +23,10 @@ public class MemberController {
 	@GetMapping
 	public CommonResponse<LoginMemberResult> get(@SessionAttribute(value = LOGIN_MEMBER, required = false) Long memberId) {
 
+		if (memberId == null) {
+			throw MEMBER_NEED_TO_LOGIN_EXCEPTION;
+		}
+
 		LoginMemberResult loginMemberResult = memberService.get(memberId);
 
 		return new CommonResponse<>("", loginMemberResult);
