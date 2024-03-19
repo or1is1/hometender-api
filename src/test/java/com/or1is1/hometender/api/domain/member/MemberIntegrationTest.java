@@ -113,7 +113,7 @@ class MemberIntegrationTest {
 
 		LoginMemberRequest loginMemberRequest = new LoginMemberRequest("loginId2", password);
 		String content = objectMapper.writeValueAsString(loginMemberRequest);
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+		String message = messageSource.getMessage("exception.member.canNotFound", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/login")
@@ -152,7 +152,7 @@ class MemberIntegrationTest {
 	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
 		// given
-		String message = messageSource.getMessage("member.exception.needToLogin", null, KOREAN);
+		String message = messageSource.getMessage("exception.member.needToLogin", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/logout")
@@ -195,7 +195,7 @@ class MemberIntegrationTest {
 		String wrongPassword = "wrongPassword";
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(wrongPassword);
 		String content = objectMapper.writeValueAsString(deleteMemberRequest);
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+		String message = messageSource.getMessage("exception.member.canNotFound", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(delete(url)

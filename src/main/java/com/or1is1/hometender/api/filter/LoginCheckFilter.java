@@ -45,7 +45,7 @@ public class LoginCheckFilter implements Filter {
 		HttpSession session = httpServletRequest.getSession(false);
 
 		if (needToLogin(requestURI, session)) {
-			String message = messageSource.getMessage("member.exception.needToLogin", null, KOREAN);
+			String message = messageSource.getMessage("exception.member.needToLogin", null, KOREAN);
 
 			log.info("{} | requestUri = {} | sessionIsNull = {}", message, requestURI, session == null);
 

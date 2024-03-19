@@ -49,16 +49,16 @@ public class DomainExceptionHandler {
 		ErrorCode code = ex.getCode();
 
 		String message = switch (code) {
-			case MEMBER_NEED_TO_LOGIN -> messageSource.getMessage("member.exception.needToLogin", null, KOREAN);
-			case MEMBER_ALREADY_EXISTS -> messageSource.getMessage("member.exception.alreadyExists", null, KOREAN);
-			case MEMBER_CAN_NOT_FIND -> messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+			case MEMBER_NEED_TO_LOGIN -> messageSource.getMessage("exception.member.needToLogin", null, KOREAN);
+			case MEMBER_ALREADY_EXISTS -> messageSource.getMessage("exception.member.alreadyExists", null, KOREAN);
+			case MEMBER_CAN_NOT_FIND -> messageSource.getMessage("exception.member.canNotFound", null, KOREAN);
 
-			case INGREDIENT_CAN_NOT_FIND -> messageSource.getMessage("ingredient.exception.canNotFound", null, KOREAN);
-			case INGREDIENT_IS_NOT_MINE -> messageSource.getMessage("ingredient.exception.isNotMine", null, KOREAN);
+			case INGREDIENT_CAN_NOT_FIND -> messageSource.getMessage("exception.ingredient.canNotFound", null, KOREAN);
+			case INGREDIENT_IS_NOT_MINE -> messageSource.getMessage("exception.ingredient.isNotMine", null, KOREAN);
 
-			case RECIPE_CAN_NOT_FIND -> messageSource.getMessage("recipe.exception.cantNotFind", null, KOREAN);
-			case RECIPE_IS_NOT_MINE -> messageSource.getMessage("recipe.exception.isNotMine", null, KOREAN);
-			case RECIPE_INGREDIENT_IS_EMPTY -> messageSource.getMessage("recipe.exception.ingredientIsEmpty", null, KOREAN);
+			case RECIPE_CAN_NOT_FIND -> messageSource.getMessage("exception.recipe.cantNotFind", null, KOREAN);
+			case RECIPE_IS_NOT_MINE -> messageSource.getMessage("exception.recipe.isNotMine", null, KOREAN);
+			case RECIPE_INGREDIENT_IS_EMPTY -> messageSource.getMessage("exception.recipe.ingredientIsEmpty", null, KOREAN);
 		};
 
 		return new ErrorResponse(code, message);

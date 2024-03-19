@@ -112,7 +112,7 @@ class MemberControllerTest {
 		// given
 		LoginMemberRequest loginMemberRequest = new LoginMemberRequest(loginId, password);
 		String content = objectMapper.writeValueAsString(loginMemberRequest);
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+		String message = messageSource.getMessage("exception.member.canNotFound", null, KOREAN);
 
 		given(memberService.login(loginMemberRequest))
 				.willThrow(MEMBER_CAN_NOT_FIND_EXCEPTION);
@@ -185,7 +185,7 @@ class MemberControllerTest {
 
 		DeleteMemberRequest deleteMemberRequest = new DeleteMemberRequest(password);
 		String content = objectMapper.writeValueAsString(deleteMemberRequest);
-		String message = messageSource.getMessage("member.exception.canNotFound", null, KOREAN);
+		String message = messageSource.getMessage("exception.member.canNotFound", null, KOREAN);
 
 		given(memberService.delete(1L, deleteMemberRequest))
 				.willThrow(MEMBER_CAN_NOT_FIND_EXCEPTION);
