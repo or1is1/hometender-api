@@ -1,11 +1,10 @@
 package com.or1is1.hometender.api.domain.member;
 
+import com.or1is1.hometender.api.common.DomainException;
+import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
+import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
 import com.or1is1.hometender.api.domain.member.dto.LoginMemberResult;
 import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
-import com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException;
-import com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.or1is1.hometender.api.common.DomainException.MEMBER_ALREADY_EXISTS_EXCEPTION;
+import static com.or1is1.hometender.api.common.ErrorCode.MEMBER_ALREADY_EXISTS;
+import static com.or1is1.hometender.api.common.ErrorCode.MEMBER_CAN_NOT_FIND;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,11 +65,12 @@ class MemberServiceTest {
 		PostMemberRequest postMemberRequest = new PostMemberRequest(loginId, password, nickname);
 
 		given(memberRepository.save(any(Member.class)))
-				.willThrow(MemberAlreadyExistsException.class);
+				.willThrow(MEMBER_ALREADY_EXISTS_EXCEPTION);
 
 		// when then
 		assertThatThrownBy(() -> memberService.post(postMemberRequest))
-				.isInstanceOf(MemberAlreadyExistsException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", MEMBER_ALREADY_EXISTS);
 	}
 
 	@Test
@@ -101,7 +104,8 @@ class MemberServiceTest {
 
 		// when then
 		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
-				.isExactlyInstanceOf(MemberCanNotFindException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", MEMBER_CAN_NOT_FIND);
 	}
 
 	@Test
@@ -118,7 +122,8 @@ class MemberServiceTest {
 
 		// when then
 		assertThatThrownBy(() -> memberService.login(loginMemberRequest))
-				.isExactlyInstanceOf(MemberCanNotFindException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", MEMBER_CAN_NOT_FIND);
 	}
 
 	@Test
@@ -154,6 +159,7 @@ class MemberServiceTest {
 
 		// when then
 		assertThatThrownBy(() -> memberService.delete(1L, deleteMemberRequest))
-				.isExactlyInstanceOf(MemberCanNotFindException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", MEMBER_CAN_NOT_FIND);
 	}
 }

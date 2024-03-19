@@ -2,11 +2,10 @@ package com.or1is1.hometender.api.filter;
 
 import jakarta.servlet.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 
 import java.io.IOException;
 
-import static com.or1is1.hometender.api.StringConst.REQUEST_UUID;
+import static com.or1is1.hometender.api.common.StringConst.REQUEST_UUID;
 import static java.util.UUID.randomUUID;
 import static org.slf4j.MDC.*;
 

@@ -7,7 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.or1is1.hometender.api.domain.member.exception.MemberCanNotFindException.MEMBER_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.MEMBER_CAN_NOT_FIND_EXCEPTION;
+
 
 @Service
 @RequiredArgsConstructor

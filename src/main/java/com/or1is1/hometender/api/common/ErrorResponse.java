@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api;
+package com.or1is1.hometender.api.common;
 
 
 public record ErrorResponse(

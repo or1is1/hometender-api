@@ -1,9 +1,8 @@
 package com.or1is1.hometender.api.domain.recipe;
 
+import com.or1is1.hometender.api.common.DomainException;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
-import com.or1is1.hometender.api.domain.recipe.exception.RecipeCanNotFindException;
-import com.or1is1.hometender.api.domain.recipe.exception.RecipeIsNotMineException;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static com.or1is1.hometender.api.common.DomainException.RECIPE_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.common.ErrorCode.RECIPE_CAN_NOT_FIND;
+import static com.or1is1.hometender.api.common.ErrorCode.RECIPE_IS_NOT_MINE;
 import static com.or1is1.hometender.api.domain.recipe.CraftMethod.BUILD;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,11 +36,12 @@ class RecipeServiceTest {
 	void get() {
 		// given
 		given(recipeRepository.findByRecipeIdAndWriter(anyLong(), any(Member.class)))
-				.willThrow(RecipeCanNotFindException.class);
+				.willThrow(RECIPE_CAN_NOT_FIND_EXCEPTION);
 
 		// when then
 		assertThatThrownBy(() -> recipeService.get(1L, 1L))
-				.isExactlyInstanceOf(RecipeCanNotFindException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", RECIPE_CAN_NOT_FIND);
 	}
 
 	@Test
@@ -57,6 +60,7 @@ class RecipeServiceTest {
 		// when then
 		long loginId = 2L;
 		assertThatThrownBy(() -> recipeService.put(1L, loginId, recipeDto))
-				.isExactlyInstanceOf(RecipeIsNotMineException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", RECIPE_IS_NOT_MINE);
 	}
 }

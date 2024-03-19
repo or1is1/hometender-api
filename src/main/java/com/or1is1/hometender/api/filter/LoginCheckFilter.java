@@ -1,8 +1,8 @@
 package com.or1is1.hometender.api.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.ErrorResponse;
-import com.or1is1.hometender.api.StringConst;
+import com.or1is1.hometender.api.common.ErrorResponse;
+import com.or1is1.hometender.api.common.StringConst;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import org.springframework.util.PatternMatchUtils;
 
 import java.io.IOException;
 
-import static com.or1is1.hometender.api.ErrorCode.MEMBER_NOT_AUTHENTICATED;
+import static com.or1is1.hometender.api.common.ErrorCode.MEMBER_NEED_TO_LOGIN;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Locale.KOREAN;
@@ -44,12 +44,12 @@ public class LoginCheckFilter implements Filter {
 		String requestURI = httpServletRequest.getRequestURI();
 		HttpSession session = httpServletRequest.getSession(false);
 
-		if (!isAuthenticated(requestURI, session)) {
-			String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
+		if (needToLogin(requestURI, session)) {
+			String message = messageSource.getMessage("member.exception.needToLogin", null, KOREAN);
 
 			log.info("{} | requestUri = {} | sessionIsNull = {}", message, requestURI, session == null);
 
-			ErrorResponse objectErrorResponse = new ErrorResponse(MEMBER_NOT_AUTHENTICATED, message);
+			ErrorResponse objectErrorResponse = new ErrorResponse(MEMBER_NEED_TO_LOGIN, message);
 			String content = objectMapper.writeValueAsString(objectErrorResponse);
 
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
@@ -64,11 +64,11 @@ public class LoginCheckFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private boolean isAuthenticated(String requestURI, HttpSession session) {
+	private boolean needToLogin(String requestURI, HttpSession session) {
 		if (PatternMatchUtils.simpleMatch(whitelist, requestURI)) {
-			return true;
+			return false;
 		}
 
-		return session != null && session.getAttribute(StringConst.LOGIN_MEMBER) != null;
+		return session == null || session.getAttribute(StringConst.LOGIN_MEMBER) == null;
 	}
 }

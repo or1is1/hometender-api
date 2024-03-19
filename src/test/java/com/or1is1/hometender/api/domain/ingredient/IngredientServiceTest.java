@@ -1,8 +1,7 @@
 package com.or1is1.hometender.api.domain.ingredient;
 
+import com.or1is1.hometender.api.common.DomainException;
 import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException;
-import com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException;
 import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
 import com.or1is1.hometender.api.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.or1is1.hometender.api.common.DomainException.INGREDIENT_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.common.ErrorCode.INGREDIENT_CAN_NOT_FIND;
+import static com.or1is1.hometender.api.common.ErrorCode.INGREDIENT_IS_NOT_MINE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
 
@@ -30,11 +32,12 @@ class IngredientServiceTest {
 	void get() {
 		// given
 		given(ingredientRepository.findByIngredientIdAndWriter(anyLong(), any(Member.class)))
-				.willThrow(IngredientCanNotFindException.class);
+				.willThrow(INGREDIENT_CAN_NOT_FIND_EXCEPTION);
 
 		// when then
 		assertThatThrownBy(() -> ingredientService.get(1L, 1L))
-				.isExactlyInstanceOf(IngredientCanNotFindException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", INGREDIENT_CAN_NOT_FIND);
 	}
 
 	@Test
@@ -53,6 +56,7 @@ class IngredientServiceTest {
 		// when then
 		long loginId = 2L;
 		assertThatThrownBy(() -> ingredientService.put(1L, loginId, ingredientDto))
-				.isExactlyInstanceOf(IngredientIsNotMineException.class);
+				.isExactlyInstanceOf(DomainException.class)
+				.hasFieldOrPropertyWithValue("code", INGREDIENT_IS_NOT_MINE);
 	}
 }

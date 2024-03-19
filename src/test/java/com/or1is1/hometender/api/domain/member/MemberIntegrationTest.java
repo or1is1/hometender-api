@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
+import static com.or1is1.hometender.api.common.StringConst.LOGIN_MEMBER;
 import static java.util.Locale.KOREAN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -152,7 +152,7 @@ class MemberIntegrationTest {
 	@DisplayName("로그아웃 실패 - 기존 로그인 회원 없음")
 	void logoutFail() throws Exception {
 		// given
-		String message = messageSource.getMessage("member.exception.notAuthenticated", null, KOREAN);
+		String message = messageSource.getMessage("member.exception.needToLogin", null, KOREAN);
 
 		// when
 		ResultActions resultActions = mockMvc.perform(post(url + "/logout")

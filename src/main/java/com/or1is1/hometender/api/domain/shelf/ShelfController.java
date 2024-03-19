@@ -1,6 +1,6 @@
 package com.or1is1.hometender.api.domain.shelf;
 
-import com.or1is1.hometender.api.StringConst;
+import com.or1is1.hometender.api.common.StringConst;
 import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

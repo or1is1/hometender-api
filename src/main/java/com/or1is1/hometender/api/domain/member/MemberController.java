@@ -8,9 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
-import static com.or1is1.hometender.api.domain.member.exception.MemberAlreadyExistsException.MEMBER_ALREADY_EXISTS_EXCEPTION;
-import static com.or1is1.hometender.api.domain.member.exception.MemberNeedToLoginException.MEMBER_NEED_TO_LOGIN_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.MEMBER_ALREADY_EXISTS_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.MEMBER_NEED_TO_LOGIN_EXCEPTION;
+import static com.or1is1.hometender.api.common.StringConst.LOGIN_MEMBER;
 
 @RestController
 @RequestMapping("/api/members")

@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.or1is1.hometender.api.domain.ingredient.exception.IngredientCanNotFindException.INGREDIENT_CAN_NOT_FIND_EXCEPTION;
-import static com.or1is1.hometender.api.domain.ingredient.exception.IngredientIsNotMineException.INGREDIENT_IS_NOT_MINE_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.INGREDIENT_CAN_NOT_FIND_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.INGREDIENT_IS_NOT_MINE_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor

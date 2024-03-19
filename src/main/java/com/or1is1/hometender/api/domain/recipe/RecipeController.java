@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.or1is1.hometender.api.StringConst.LOGIN_MEMBER;
-import static com.or1is1.hometender.api.domain.recipe.exception.RecipeIngredientIsEmptyException.RECIPE_INGREDIENT_IS_EMPTY_EXCEPTION;
+import static com.or1is1.hometender.api.common.DomainException.RECIPE_INGREDIENT_IS_EMPTY_EXCEPTION;
+import static com.or1is1.hometender.api.common.StringConst.LOGIN_MEMBER;
 
 @RestController
 @RequestMapping("/api/recipe")
