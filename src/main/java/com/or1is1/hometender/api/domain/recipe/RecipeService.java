@@ -15,6 +15,7 @@ import static com.or1is1.hometender.api.common.DomainException.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RecipeService {
 
 	private final RecipeRepository recipeRepository;
