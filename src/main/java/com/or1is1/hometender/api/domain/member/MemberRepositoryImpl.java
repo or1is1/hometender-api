@@ -1,6 +1,6 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.domain.member.dto.QIsExistMemberResponse;
+import com.or1is1.hometender.api.dto.QIsExistMemberResponse;
 import com.or1is1.hometender.api.dto.IsExistMemberResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
