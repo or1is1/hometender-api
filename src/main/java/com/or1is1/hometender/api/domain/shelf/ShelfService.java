@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.shelf;
 
 import com.or1is1.hometender.api.domain.ingredient.Ingredient;
-import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
+import com.or1is1.hometender.api.dto.IngredientDto;
 import com.or1is1.hometender.api.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

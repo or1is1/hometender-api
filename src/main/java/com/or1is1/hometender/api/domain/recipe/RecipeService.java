@@ -1,8 +1,8 @@
 package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.domain.member.Member;
-import com.or1is1.hometender.api.domain.recipe.dto.GetRecipeListResponse;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
+import com.or1is1.hometender.api.dto.GetRecipeListResponse;
+import com.or1is1.hometender.api.dto.RecipeDto;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeIngredientRepository;
 import com.or1is1.hometender.api.domain.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;

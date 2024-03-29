@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.domain.member.dto.*;
 import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
+import com.or1is1.hometender.api.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

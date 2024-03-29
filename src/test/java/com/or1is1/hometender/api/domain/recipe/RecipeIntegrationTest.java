@@ -2,11 +2,11 @@ package com.or1is1.hometender.api.domain.recipe;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.domain.ingredient.dto.IngredientDto;
+import com.or1is1.hometender.api.dto.IngredientDto;
 import com.or1is1.hometender.api.domain.member.MemberService;
-import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeIngredientDto;
+import com.or1is1.hometender.api.dto.PostMemberRequest;
+import com.or1is1.hometender.api.dto.RecipeDto;
+import com.or1is1.hometender.api.dto.RecipeIngredientDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

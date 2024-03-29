@@ -1,7 +1,7 @@
 package com.or1is1.hometender.api.domain.bookmark;
 
 import com.or1is1.hometender.api.common.StringConst;
-import com.or1is1.hometender.api.domain.recipe.dto.RecipeDto;
+import com.or1is1.hometender.api.dto.RecipeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.or1is1.hometender.api.domain.member;
 
-import com.or1is1.hometender.api.domain.member.dto.*;
+import com.or1is1.hometender.api.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

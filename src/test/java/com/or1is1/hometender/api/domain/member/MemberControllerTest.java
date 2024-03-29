@@ -2,10 +2,10 @@ package com.or1is1.hometender.api.domain.member;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.or1is1.hometender.api.domain.member.dto.DeleteMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.LoginMemberRequest;
-import com.or1is1.hometender.api.domain.member.dto.LoginMemberResult;
-import com.or1is1.hometender.api.domain.member.dto.PostMemberRequest;
+import com.or1is1.hometender.api.dto.DeleteMemberRequest;
+import com.or1is1.hometender.api.dto.LoginMemberRequest;
+import com.or1is1.hometender.api.dto.LoginMemberResult;
+import com.or1is1.hometender.api.dto.PostMemberRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
