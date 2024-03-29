@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeRepositoryInterface {
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	public List<Recipe> findByWriter(Member writer);
 
 	public Optional<Recipe> findByRecipeIdAndWriter(Long recipeId, Member writer);
