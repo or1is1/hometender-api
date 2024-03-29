@@ -1,6 +1,7 @@
 package com.or1is1.hometender.api.domain.member.repository;
 
 import com.or1is1.hometender.api.domain.member.Member;
+import com.or1is1.hometender.api.domain.member.MemberRepository;
 import com.or1is1.hometender.api.dto.IsExistMemberResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,6 @@ package com.or1is1.hometender.api.domain.ingredient;
 
 import com.or1is1.hometender.api.common.DomainException;
 import com.or1is1.hometender.api.dto.IngredientDto;
-import com.or1is1.hometender.api.domain.ingredient.repository.IngredientRepository;
 import com.or1is1.hometender.api.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

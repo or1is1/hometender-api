@@ -1,4 +1,4 @@
-package com.or1is1.hometender.api.domain.recipe.repository;
+package com.or1is1.hometender.api.domain.recipe;
 
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.recipe.Recipe;

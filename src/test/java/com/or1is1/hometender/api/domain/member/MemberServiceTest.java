@@ -5,7 +5,6 @@ import com.or1is1.hometender.api.dto.DeleteMemberRequest;
 import com.or1is1.hometender.api.dto.LoginMemberRequest;
 import com.or1is1.hometender.api.dto.LoginMemberResult;
 import com.or1is1.hometender.api.dto.PostMemberRequest;
-import com.or1is1.hometender.api.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
