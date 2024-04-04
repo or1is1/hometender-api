@@ -1,5 +1,6 @@
 package com.or1is1.hometender.api.domain.member.repository;
 
+import com.or1is1.hometender.api.configuration.QueryDslConfig;
 import com.or1is1.hometender.api.domain.member.Member;
 import com.or1is1.hometender.api.domain.member.MemberRepository;
 import com.or1is1.hometender.api.dto.IsExistMemberResponse;
@@ -7,11 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(QueryDslConfig.class)
 class MemberRepositoryImplTest {
 	private final String loginId;
 	private final String password;
