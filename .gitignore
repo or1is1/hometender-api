@@ -1,5 +1,6 @@
 application.yml
 application.properties
+src/**/generated/
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,java,macos,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,java,macos,gradle
